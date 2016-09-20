@@ -90,7 +90,7 @@ public class TripRegisterFragment extends Fragment {
         String url2="http://192.168.1.15:8080/Tesis_Ojeda/viajes";
         //**** validar si el usario ya registro un carro *****
         // Request a string response from the provided URL.
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

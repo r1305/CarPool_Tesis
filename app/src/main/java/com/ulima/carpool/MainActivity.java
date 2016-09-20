@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionBarDrawerToggle.syncState();
 
         nav.setNavigationItemSelectedListener(this);
+        nav.animate();
 
 
 
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         switch(item.getItemId()){
             case R.id.logout:
@@ -102,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.viajes:
-                item.setChecked(true);
                 Fragment libros=ListTripFragment.newInstance();
                 ft.replace(R.id.flaContenido,libros);
                 toolbar.setTitle("Viajes");
