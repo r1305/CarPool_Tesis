@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/carro"
+        android:title="Registrar Carro" />
+    <item
+        android:id="@+id/viajes"
+        android:title="Viajes"
+        app:rippleColor="#00BCD5" />
+
+    <item
+        android:id="@+id/registar_viaje"
+        android:title="Nuevo Viaje"
+        app:rippleColor="#00BCD5" />
+    <item
+        android:id="@+id/perfil"
+        android:title="Perfil"
+        app:rippleColor="#00BCD5" />
+
+    <item
+        android:id="@+id/logout"
+        android:title="Salir"
+        app:rippleColor="#00BCD5" />
+</menu>
