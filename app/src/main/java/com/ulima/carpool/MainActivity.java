@@ -151,7 +151,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void getDatos(final String u) {
         final RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
 
-        String url = "http://192.168.1.15:8080/Tesis_Ojeda/getDatos";
+        String url = "https://tesis-ojeda-carrasco.herokuapp.com/getDatos";
+
 
         // Request a string response from the provided URL.
         final StringRequest postRequest = new StringRequest(Request.Method.POST, url,

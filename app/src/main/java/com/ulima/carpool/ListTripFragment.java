@@ -6,6 +6,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
@@ -43,6 +45,10 @@ public class ListTripFragment extends Fragment {
     ArrayAdapter<String> mLeadsAdapter;
     ProgressDialog pDialog;
     SessionManager session;
+    RecyclerView trips;
+    ViajesRecyclerAdapter adapter;
+    //List<JSONObject> l2=new ArrayList<>();
+    List<String> l2=new ArrayList<>();
 
     public ListTripFragment() {
         // Required empty public constructor
@@ -67,6 +73,13 @@ public class ListTripFragment extends Fragment {
 
         list=(ListView)v.findViewById(R.id.viajes);
         pDialog = new ProgressDialog(getActivity());
+
+        trips=(RecyclerView)v.findViewById(R.id.recycler_view_trips);
+        trips.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        adapter=new ViajesRecyclerAdapter(l2);
+        trips.setAdapter(adapter);
+
         String message = "Cargando...";
 
         SpannableString ss2 = new SpannableString(message);
@@ -78,6 +91,7 @@ public class ListTripFragment extends Fragment {
         pDialog.setCancelable(true);
         pDialog.show();
         getViajes();
+
 
         return v;
     }
@@ -99,22 +113,31 @@ public class ListTripFragment extends Fragment {
                         try {
                             obj = (JSONObject) jp.parse(response);
                             JSONArray ja = (JSONArray) obj.get("viajes");
+                            System.out.println(obj);
                             for(int i=0;i<ja.size();i++){
-                                l.add(ja.get(i).toString());
+                                //l.add(ja.get(i).toString());
+                                l2.add(ja.get(i).toString());
+                                System.out.println(ja.get(i));
                             }
-                            mLeadsAdapter = new ArrayAdapter<>(
+
+
+                            adapter.notifyDataSetChanged();
+
+
+                            pDialog.dismiss();
+                            /*mLeadsAdapter = new ArrayAdapter<>(
                                     getActivity(),
                                     android.R.layout.simple_list_item_1,l);
                             list.setAdapter(mLeadsAdapter);
 
-                            pDialog.dismiss();
+
 
                             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                                     Toast.makeText(getActivity(), list.getAdapter().getItem(i).toString(), Toast.LENGTH_SHORT).show();
                                 }
-                            });
+                            });*/
 
                         } catch (ParseException e) {
                             Toast.makeText(getActivity(),e.toString(), Toast.LENGTH_SHORT).show();
