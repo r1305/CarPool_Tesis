@@ -10,12 +10,28 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 import com.ulima.carpool.Utils.SessionManager;
+
+import org.json.simple.parser.JSONParser;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     //@Bind(R.id.drawer_layout)
@@ -28,10 +44,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView txt_nav;
     //@Bind(R.id.profile)
     SessionManager session;
+    CircleImageView img;
+    String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        session=new SessionManager(getApplicationContext());
+        session.checkLogin();
+        HashMap<String,String>u=session.getUserDetails();
+        email=u.get(SessionManager.KEY_EMAIL);
+        getDatos(email);
         setContentView(R.layout.activity_main);
 
         toolbar=(Toolbar)findViewById(R.id.toolbar);
@@ -39,9 +62,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         dl=(DrawerLayout)findViewById(R.id.drawer_layout);
         View v=nav.getHeaderView(0);
         txt_nav=(TextView)v.findViewById(R.id.txt_nav_header);
+        img=(CircleImageView)v.findViewById(R.id.profile);
 
-        session=new SessionManager(getApplicationContext());
-        session.checkLogin();
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -81,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
+
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         switch(item.getItemId()){
             case R.id.logout:
@@ -96,8 +120,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.perfil:
-                //Fragment perfil=ProfileFragment.newInstance(datos);
-                //ft.replace(R.id.flaContenido,perfil);
+                Fragment perfil=PerfilFragment.newInstance();
+                ft.replace(R.id.flaContenido,perfil);
                 toolbar.setTitle("Perfil");
                 ft.commit();
                 dl.closeDrawers();
@@ -122,6 +146,51 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
         }
         return false;
+    }
+
+    public void getDatos(final String u) {
+        final RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+
+        String url = "http://192.168.1.15:8080/Tesis_Ojeda/getDatos";
+
+        // Request a string response from the provided URL.
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        System.out.println("***** "+response+" ****");
+                        JSONParser p=new JSONParser();
+                        try{
+                            org.json.simple.JSONObject o=(org.json.simple.JSONObject)p.parse(response);
+                            txt_nav.setText(o.get("nombre").toString());
+
+                            if(o.get("foto").toString()!=""&&o.get("foto").toString()!=null){
+                                Picasso.with(MainActivity.this).load(o.get("foto").toString()).into(img);
+                            }
+
+                        }catch (Exception e){
+                            System.out.println("error: "+e);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("correo", u);
+
+                return params;
+            }
+        };
+        queue.add(postRequest);
     }
 
 

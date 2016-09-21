@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         if(response.equals(user)){
                             pDialog.dismiss();
-                            Intent i=new Intent(LoginActivity.this, FacebookActivity.class);
+                            Intent i=new Intent(LoginActivity.this, MainActivity.class);
                             session.createLoginSession(response);
 
                             startActivity(i);
@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error
-                        //Toast.makeText(LoginActivity.this, "Error: " + error.networkResponse.statusCode, Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, "Error: " + error, Toast.LENGTH_LONG).show();
 
                     }
                 }
