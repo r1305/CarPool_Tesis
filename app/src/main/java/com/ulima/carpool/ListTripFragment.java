@@ -42,13 +42,10 @@ public class ListTripFragment extends Fragment {
 
 
     ListView list;
-    ArrayAdapter<String> mLeadsAdapter;
     ProgressDialog pDialog;
-    SessionManager session;
     RecyclerView trips;
     ViajesRecyclerAdapter adapter;
-    //List<JSONObject> l2=new ArrayList<>();
-    List<String> l2=new ArrayList<>();
+    List<JSONObject> l2=new ArrayList<>();
 
     public ListTripFragment() {
         // Required empty public constructor
@@ -96,8 +93,8 @@ public class ListTripFragment extends Fragment {
         return v;
     }
 
-    public List<String> getViajes() {
-        final List<String> l = new ArrayList<>();
+    public List<JSONObject> getViajes() {
+        final List<JSONObject> l = new ArrayList<>();
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://tesis-ojeda-carrasco.herokuapp.com/ListarViajes";
@@ -107,39 +104,20 @@ public class ListTripFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         // response
-                        //System.out.println("***** " + response);
+                        System.out.println("***** " + response);
                         JSONParser jp = new JSONParser();
                         JSONObject obj;
                         try {
                             obj = (JSONObject) jp.parse(response);
                             JSONArray ja = (JSONArray) obj.get("viajes");
-                            System.out.println(obj);
+                            System.out.println(ja);
                             for(int i=0;i<ja.size();i++){
-                                //l.add(ja.get(i).toString());
-                                l2.add(ja.get(i).toString());
+                                l2.add((JSONObject)ja.get(i));
                                 System.out.println(ja.get(i));
                             }
-
-
                             adapter.notifyDataSetChanged();
-
-
                             pDialog.dismiss();
-                            /*mLeadsAdapter = new ArrayAdapter<>(
-                                    getActivity(),
-                                    android.R.layout.simple_list_item_1,l);
-                            list.setAdapter(mLeadsAdapter);
-
-
-
-                            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                    Toast.makeText(getActivity(), list.getAdapter().getItem(i).toString(), Toast.LENGTH_SHORT).show();
-                                }
-                            });*/
-
-                        } catch (ParseException e) {
+                        } catch (Exception e) {
                             Toast.makeText(getActivity(),e.toString(), Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                             pDialog.dismiss();

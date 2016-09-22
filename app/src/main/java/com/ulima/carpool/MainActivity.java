@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     SessionManager session;
     CircleImageView img;
     String email;
+    String datos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         switch(item.getItemId()){
             case R.id.logout:
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.perfil:
-                Fragment perfil=PerfilFragment.newInstance();
+                Fragment perfil=PerfilFragment.newInstance(datos);
                 ft.replace(R.id.flaContenido,perfil);
                 toolbar.setTitle("Perfil");
                 ft.commit();
@@ -163,12 +163,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         System.out.println("***** "+response+" ****");
                         JSONParser p=new JSONParser();
                         try{
+                            datos=response;
+                            FragmentTransaction ft = getFragmentManager().beginTransaction();
+                            Fragment perfil=PerfilFragment.newInstance(datos);
+                            ft.replace(R.id.flaContenido,perfil);
+                            toolbar.setTitle("Perfil");
+                            ft.commit();
+
                             org.json.simple.JSONObject o=(org.json.simple.JSONObject)p.parse(response);
                             txt_nav.setText(o.get("nombre").toString());
 
                             if(o.get("foto").toString()!=""&&o.get("foto").toString()!=null){
                                 Picasso.with(MainActivity.this).load(o.get("foto").toString()).into(img);
                             }
+
+
 
                         }catch (Exception e){
                             System.out.println("error: "+e);

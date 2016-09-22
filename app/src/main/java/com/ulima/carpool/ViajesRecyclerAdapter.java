@@ -18,9 +18,9 @@ import java.util.List;
 public class ViajesRecyclerAdapter extends RecyclerView.Adapter<ViajesRecyclerAdapter.ViewHolder>{
 
     //List<JSONObject> list=new ArrayList<>();
-    List<String> list=new ArrayList<>();
+    List<JSONObject> list=new ArrayList<>();
 
-    public ViajesRecyclerAdapter(List<String> list) {
+    public ViajesRecyclerAdapter(List<JSONObject> list) {
         this.list = list;
     }
 
@@ -31,10 +31,10 @@ public class ViajesRecyclerAdapter extends RecyclerView.Adapter<ViajesRecyclerAd
 
     @Override
     public void onBindViewHolder(final ViajesRecyclerAdapter.ViewHolder holder, int position) {
-        String o=list.get(position);
-        holder.destino.setText(o);
+        JSONObject o=list.get(position);
+        holder.destino.setText(o.get("destino").toString());
         System.out.println("holder: "+o);
-        //holder.auto.setText(o.get("marca").toString());
+        holder.auto.setText(o.get("placa").toString());
     }
 
     @Override
@@ -50,13 +50,16 @@ public class ViajesRecyclerAdapter extends RecyclerView.Adapter<ViajesRecyclerAd
     class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        TextView destino;
-        TextView auto;
+        TextView destino,auto;
 
         public ViewHolder(View itemView) {
             super(itemView);
             destino=(TextView)itemView.findViewById(R.id.item_destino);
             auto=(TextView)itemView.findViewById(R.id.item_auto);
+
+
+            //destino.setTextSize(25);
+            //auto.setTextSize(25);
 
         }
     }

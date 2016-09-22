@@ -55,6 +55,7 @@ public class PerfilFragment extends Fragment {
     ProgressDialog pDialog;
     TextView nombre,carrera,edad;
     CircleImageView img;
+    String data;
 
     public PerfilFragment() {
         // Required empty public constructor
@@ -62,8 +63,11 @@ public class PerfilFragment extends Fragment {
 
 
     // TODO: Rename and change types and number of parameters
-    public static PerfilFragment newInstance() {
+    public static PerfilFragment newInstance(String datos) {
         PerfilFragment fragment = new PerfilFragment();
+        Bundle args=new Bundle();
+        args.putString("datos",datos);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -75,7 +79,10 @@ public class PerfilFragment extends Fragment {
         session=new SessionManager(getActivity());
         HashMap<String,String>u=session.getUserDetails();
         email=u.get(SessionManager.KEY_EMAIL);
-        getDatos(email);
+        //getDatos(email);
+        if(getArguments()!=null){
+            data=getArguments().getString("datos");
+        }
     }
 
     @Override
@@ -89,6 +96,18 @@ public class PerfilFragment extends Fragment {
         carrera=(TextView)v.findViewById(R.id.carrera);
         edad=(TextView)v.findViewById(R.id.edad_perfil);
         img=(CircleImageView)v.findViewById(R.id.foto_perfil);
+
+        try {
+            JSONParser p = new JSONParser();
+            org.json.simple.JSONObject o = (org.json.simple.JSONObject) p.parse(data);
+            nombre.setText(o.get("nombre").toString());
+            carrera.setText(o.get("carrera").toString());
+            edad.setText(o.get("edad").toString());
+            Picasso.with(getActivity()).load(o.get("foto").toString()).into(img);
+
+        }catch (Exception e){
+
+        }
 
 
         loginButton.setFragment(this);
