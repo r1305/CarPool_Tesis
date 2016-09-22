@@ -77,7 +77,7 @@ public class ListTripFragment extends Fragment {
         adapter=new ViajesRecyclerAdapter(l2);
         trips.setAdapter(adapter);
 
-        String message = "Cargando...";
+        String message = "Cargando viajes...";
 
         SpannableString ss2 = new SpannableString(message);
         ss2.setSpan(new RelativeSizeSpan(1f), 0, ss2.length(), 0);
