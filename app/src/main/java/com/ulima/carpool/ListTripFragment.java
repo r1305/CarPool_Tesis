@@ -1,5 +1,6 @@
 package com.ulima.carpool;
 
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -76,6 +77,17 @@ public class ListTripFragment extends Fragment {
 
         adapter=new ViajesRecyclerAdapter(l2);
         trips.setAdapter(adapter);
+        adapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                JSONObject o=(JSONObject)view.getTag();
+                //Toast.makeText(getActivity(), o.toJSONString(), Toast.LENGTH_SHORT).show();
+                FragmentTransaction ft=getFragmentManager().beginTransaction();
+                Fragment details=DetailsFragment.newInstance(o.get("user").toString());
+                ft.replace(R.id.flaContenido,details);
+                ft.commit();
+            }
+        });
 
         String message = "Cargando viajes...";
 
@@ -98,7 +110,7 @@ public class ListTripFragment extends Fragment {
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://tesis-ojeda-carrasco.herokuapp.com/ListarViajes";
-        String url2="http://192.168.1.15:8080/Tesis_Ojeda/ListarViajes";
+        String url2="http://192.168.1.6:8080/Tesis_Ojeda/ListarViajes";
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -118,6 +130,7 @@ public class ListTripFragment extends Fragment {
                             adapter.notifyDataSetChanged();
                             pDialog.dismiss();
                         } catch (Exception e) {
+                            getViajes();
                             Toast.makeText(getActivity(),e.toString(), Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                             pDialog.dismiss();

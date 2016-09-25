@@ -23,6 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.ulima.carpool.Utils.AES;
 import com.ulima.carpool.Utils.SessionManager;
 
 import java.util.ArrayList;
@@ -110,19 +111,24 @@ public class RegisterActivity extends AppCompatActivity {
 
                 pDialog.setCancelable(true);
                 pDialog.show();
+                AES aes=new AES();
+                try {
+                    String nombre_enc = aes.encrypt(nombre.getText().toString());
+                    String sexo_enc=aes.encrypt(sexo.getSelectedItem().toString());
+                    String carrera_enc=aes.encrypt(carrera.getSelectedItem().toString());
 
-                signup(nombre.getText().toString(),edad.getText().toString(),
-                        carrera.getSelectedItem().toString(),ciclo.getText().toString(),
-                        sexo.getSelectedItem().toString());
+                    signup(nombre_enc,edad.getText().toString(),carrera_enc,ciclo.getText().toString(),sexo_enc);
+                }catch(Exception e){
+                    System.out.println(e);
+                }
             }
         });
-        
-
     }
 
     public void signup(final String name,final String edad,final String carrera,final String ciclo,final String sexo) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://tesis-ojeda-carrasco.herokuapp.com/registro";
+        String url2 = "http://192.168.1.6:8080/Tesis_Ojeda/registro";
 
         // Request a string response from the provided URL.
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
@@ -137,6 +143,7 @@ public class RegisterActivity extends AppCompatActivity {
                             startActivity(i);
                             RegisterActivity.this.finish();
                         } else {
+                            pDialog.dismiss();
                             Toast.makeText(RegisterActivity.this, "¡El correo ya existe!", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -145,7 +152,8 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error
-                        Toast.makeText(RegisterActivity.this, "Error: " + error.networkResponse.statusCode, Toast.LENGTH_LONG).show();
+                        pDialog.dismiss();
+                        Toast.makeText(RegisterActivity.this, "Error: " + error, Toast.LENGTH_LONG).show();
 
                     }
                 }

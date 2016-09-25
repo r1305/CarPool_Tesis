@@ -32,6 +32,7 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.squareup.picasso.Picasso;
+import com.ulima.carpool.Utils.AES;
 import com.ulima.carpool.Utils.SessionManager;
 
 import org.json.JSONArray;
@@ -82,6 +83,7 @@ public class PerfilFragment extends Fragment {
         //getDatos(email);
         if(getArguments()!=null){
             data=getArguments().getString("datos");
+            System.out.println(data);
         }
     }
 
@@ -100,8 +102,11 @@ public class PerfilFragment extends Fragment {
         try {
             JSONParser p = new JSONParser();
             org.json.simple.JSONObject o = (org.json.simple.JSONObject) p.parse(data);
-            nombre.setText(o.get("nombre").toString());
-            carrera.setText(o.get("carrera").toString());
+            AES a=new AES();
+            System.out.println(o.get("nombre"));
+            System.out.println(o.get("nombre").toString());
+            nombre.setText(a.decrypt(o.get("nombre").toString()));
+            carrera.setText(a.decrypt(o.get("carrera").toString()));
             edad.setText(o.get("edad").toString());
             Picasso.with(getActivity()).load(o.get("foto").toString()).into(img);
 
@@ -174,53 +179,6 @@ public class PerfilFragment extends Fragment {
         } catch (Exception e) {
 
         }
-    }
-
-    public void getDatos(final String u) {
-        final RequestQueue queue = Volley.newRequestQueue(getActivity());
-
-        String url2 = "http://192.168.1.15:8080/Tesis_Ojeda/getDatos";
-        String url = "https://tesis-ojeda-carrasco.herokuapp.com/getDatos";
-
-        // Request a string response from the provided URL.
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // response
-                        System.out.println("***** "+response+" ****");
-                        JSONParser p=new JSONParser();
-                        try{
-                            org.json.simple.JSONObject o=(org.json.simple.JSONObject)p.parse(response);
-                            nombre.setText(o.get("nombre").toString());
-                            carrera.setText(o.get("carrera").toString());
-                            edad.setText(o.get("edad").toString());
-                            if(o.get("foto").toString()!=""&&o.get("foto").toString()!=null){
-                                Picasso.with(getActivity()).load(o.get("foto").toString()).into(img);
-                            }
-
-                        }catch (Exception e){
-                            System.out.println("error: "+e);
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // error
-                        Log.d("Error.Response", error.toString());
-                    }
-                }
-        ) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("correo", u);
-
-                return params;
-            }
-        };
-        queue.add(postRequest);
     }
 
     public void updateFbUser(final String correo,final String fb,final String comun,final String foto) {

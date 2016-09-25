@@ -24,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
+import com.ulima.carpool.Utils.AES;
 import com.ulima.carpool.Utils.SessionManager;
 
 import org.json.simple.parser.JSONParser;
@@ -152,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
 
         String url = "https://tesis-ojeda-carrasco.herokuapp.com/getDatos";
+        String url2="http://192.168.1.6:8080/Tesis_Ojeda/getDatos";
 
 
         // Request a string response from the provided URL.
@@ -169,9 +171,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             ft.replace(R.id.flaContenido,perfil);
                             toolbar.setTitle("Perfil");
                             ft.commit();
-
+                            AES a=new AES();
                             org.json.simple.JSONObject o=(org.json.simple.JSONObject)p.parse(response);
-                            txt_nav.setText(o.get("nombre").toString());
+                            txt_nav.setText(a.decrypt(o.get("nombre").toString()));
 
                             if(o.get("foto").toString()!=""&&o.get("foto").toString()!=null){
                                 Picasso.with(MainActivity.this).load(o.get("foto").toString()).into(img);

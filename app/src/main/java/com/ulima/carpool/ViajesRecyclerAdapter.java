@@ -1,5 +1,7 @@
 package com.ulima.carpool;
 
+import android.app.FragmentTransaction;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,8 @@ public class ViajesRecyclerAdapter extends RecyclerView.Adapter<ViajesRecyclerAd
 
     //List<JSONObject> list=new ArrayList<>();
     List<JSONObject> list=new ArrayList<>();
+    Context c;
+    View.OnClickListener listener;
 
     public ViajesRecyclerAdapter(List<JSONObject> list) {
         this.list = list;
@@ -26,15 +30,18 @@ public class ViajesRecyclerAdapter extends RecyclerView.Adapter<ViajesRecyclerAd
 
     @Override
     public ViajesRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        c=parent.getContext();
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_viajes,parent,false));
     }
 
     @Override
     public void onBindViewHolder(final ViajesRecyclerAdapter.ViewHolder holder, int position) {
-        JSONObject o=list.get(position);
+        final JSONObject o=list.get(position);
         holder.destino.setText(o.get("destino").toString());
         System.out.println("holder: "+o);
         holder.auto.setText(o.get("placa").toString());
+        holder.itemView.setTag(o);
+        holder.itemView.setOnClickListener(listener);
     }
 
     @Override
@@ -46,6 +53,11 @@ public class ViajesRecyclerAdapter extends RecyclerView.Adapter<ViajesRecyclerAd
 
         }
     }
+
+    public void setOnClickListener(View.OnClickListener listener){
+        this.listener = listener;
+    }
+
 
     class ViewHolder extends RecyclerView.ViewHolder {
 

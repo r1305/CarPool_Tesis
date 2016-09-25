@@ -12,17 +12,20 @@ public class Modelo {
 
     public Alumno setDatosA(String alumno) {
         Alumno a = new Alumno();
+        AES aes=new AES();
         JSONParser p = new JSONParser();
         JSONObject o;
         try {
 
 
             o = (JSONObject) p.parse(alumno);
-            System.out.println(o.get("carrera") + "-" + o.get("ciclo") + "-" + o.get("sexo") + "-" + o.get("edad"));
-            a.setCarrera((String)o.get("carrera"));
+            //System.out.println(o.get("carrera") + "-" + o.get("ciclo") + "-" + o.get("sexo") + "-" + o.get("edad"));
+            a.setNombres(aes.decrypt(o.get("nombre").toString()));
+            a.setCarrera(aes.decrypt((String)o.get("carrera")));
             a.setCiclo(Integer.parseInt(String.valueOf((long)o.get("ciclo"))));
             a.setSexo((String)o.get("sexo"));
             a.setEdad(Integer.parseInt(String.valueOf((long)o.get("edad"))));
+            a.setComun((int)o.get("comun"));
             System.out.println("alumno A: " + a.getSexo() + "-" + a.getCarrera() + "-" + a.getCiclo() + "-" + a.getEdad());
 
 
@@ -34,19 +37,17 @@ public class Modelo {
 
     public Alumno setDatosB(String alumno) {
         Alumno b = new Alumno();
+        AES aes=new AES();
         JSONParser p = new JSONParser();
         JSONObject o;
         try {
 
             o = (JSONObject) p.parse(alumno);
-            System.out.println(o.get("carrera") + "-" + o.get("ciclo") + "-" + o.get("sexo") + "-" + o.get("edad"));
-            b.setCarrera((String)o.get("carrera"));
+            b.setNombres(aes.decrypt(o.get("nombre").toString()));
+            b.setCarrera(aes.decrypt((String)o.get("carrera")));
             b.setCiclo(Integer.parseInt(String.valueOf((long)o.get("ciclo"))));
             b.setSexo((String)o.get("sexo"));
             b.setEdad(Integer.parseInt(String.valueOf((long)o.get("edad"))));
-            System.out.println("alumno B: " + b.getSexo() + "-" + b.getCarrera() + "-" + b.getCiclo() + "-" + b.getEdad());
-
-
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -95,18 +96,18 @@ public class Modelo {
         return afinidadSexo;
     }
 
-    public double calcularAfinidadFacebook(Alumno alumno, Alumno alumno2, int amigosComun) {
+    public double calcularAfinidadFacebook(Alumno alumno) {
         double afinidadFb;
 
-        if (amigosComun >= 50) {
+        if (alumno.getComun() >= 50) {
             afinidadFb = 1;
-        } else if (amigosComun < 50 & amigosComun >= 30) {
+        } else if (alumno.getComun() < 50 & alumno.getComun() >= 30) {
             afinidadFb = 0.8;
-        } else if (amigosComun < 30 & amigosComun >= 15) {
+        } else if (alumno.getComun() < 30 & alumno.getComun() >= 15) {
             afinidadFb = 0.5;
-        } else if (amigosComun < 15 & amigosComun >= 5) {
+        } else if (alumno.getComun() < 15 & alumno.getComun() >= 5) {
             afinidadFb = 0.3;
-        } else if (amigosComun < 5 & amigosComun >= 1) {
+        } else if (alumno.getComun() < 5 & alumno.getComun() >= 1) {
             afinidadFb = 0.2;
         } else {
             afinidadFb = 0;
@@ -177,10 +178,10 @@ public class Modelo {
         return afinidadCiclo;
     }
 
-    public double calcularAfinidadCaracteristicas(Alumno a, Alumno b, int comun) {
+    public double calcularAfinidadCaracteristicas(Alumno a, Alumno b) {
         double afinidadEdad = this.calcularAfinidadEdad(a, b);
         double afinidadSexo = this.calcularAfinidadSexo(a, b);
-        double afinidadFb = this.calcularAfinidadFacebook(a, b, comun);
+        double afinidadFb = this.calcularAfinidadFacebook(a);
         double factorEdad, factorSexo, factorFb, afinidadCaracteristicas;
 
         factorEdad = 0.2;
@@ -203,8 +204,8 @@ public class Modelo {
         return afinidadUniversidad;
     }
 
-    public double calcularAfinidadTotal(Alumno a, Alumno b, int comun) {
-        double afinidadCaracteristicas = this.calcularAfinidadCaracteristicas(a, b, comun);
+    public double calcularAfinidadTotal(Alumno a, Alumno b) {
+        double afinidadCaracteristicas = this.calcularAfinidadCaracteristicas(a, b);
         double afinidadUniversidad = this.calcularAfinidadUniversidad(a, b);
         double factorCaracteristicas, factorUniversidad, afinidadTotal;
 

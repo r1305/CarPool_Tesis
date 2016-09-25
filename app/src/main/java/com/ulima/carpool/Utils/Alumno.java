@@ -6,19 +6,11 @@ package com.ulima.carpool.Utils;
 public class Alumno {
 
     String nombres, apellidos, carrera, facultad, sexo,correo,clave,userFbId;
-    int edad,ciclo;
+    int edad,ciclo,comun;
 
     public Alumno() {
     }
 
-    public Alumno(String nombres, String apellidos, String carrera, String sexo, int edad, int ciclo) {
-        this.nombres = nombres;
-        this.apellidos = apellidos;
-        this.carrera = carrera;
-        this.sexo = sexo;
-        this.edad = edad;
-        this.ciclo = ciclo;
-    }
 
     public String getUserFbId() {
         return userFbId;
@@ -90,5 +82,13 @@ public class Alumno {
 
     public void setCiclo(int ciclo) {
         this.ciclo = ciclo;
+    }
+
+    public int getComun() {
+        return comun;
+    }
+
+    public void setComun(int comun) {
+        this.comun = comun;
     }
 }
