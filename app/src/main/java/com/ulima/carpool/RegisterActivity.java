@@ -27,6 +27,7 @@ import com.ulima.carpool.Utils.AES;
 import com.ulima.carpool.Utils.SessionManager;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +81,14 @@ public class RegisterActivity extends AppCompatActivity {
         career.add("Ingeniería Industrial");
         career.add("Psicología");
         career.add("Marketing");
+        career.add("Comunicaciones");
+        career.add("Negocios Internacionales");
+        career.add("Derecho");
+        career.add("Arquitectura");
+        career.add("Economía");
+        career.add("Contabilidad");
+        career.add("Administración");
+        java.util.Collections.sort(career);
         ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, career);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
