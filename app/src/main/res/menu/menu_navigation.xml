@@ -7,6 +7,10 @@
         app:rippleColor="#00BCD5" />
 
     <item
+        android:id="@+id/notificaciones"
+        android:title="Solicitudes" />
+
+    <item
         android:id="@+id/carro"
         android:title="Registrar Carro" />
     <item

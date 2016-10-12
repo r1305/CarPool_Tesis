@@ -99,15 +99,15 @@ public class Modelo {
     public double calcularAfinidadFacebook(Alumno alumno) {
         double afinidadFb;
 
-        if (alumno.getComun() >= 50) {
+        if (alumno.getComun() >= 25) {
             afinidadFb = 1;
-        } else if (alumno.getComun() < 50 & alumno.getComun() >= 30) {
+        } else if (alumno.getComun() < 25 & alumno.getComun() >= 14) {
             afinidadFb = 0.8;
-        } else if (alumno.getComun() < 30 & alumno.getComun() >= 15) {
+        } else if (alumno.getComun() < 14 & alumno.getComun() >= 7) {
             afinidadFb = 0.5;
-        } else if (alumno.getComun() < 15 & alumno.getComun() >= 5) {
+        } else if (alumno.getComun() < 7 & alumno.getComun() >= 3) {
             afinidadFb = 0.3;
-        } else if (alumno.getComun() < 5 & alumno.getComun() >= 1) {
+        } else if (alumno.getComun() < 3 & alumno.getComun() >= 1) {
             afinidadFb = 0.2;
         } else {
             afinidadFb = 0;

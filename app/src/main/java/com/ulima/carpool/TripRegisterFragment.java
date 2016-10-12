@@ -59,6 +59,7 @@ public class TripRegisterFragment extends Fragment {
         // Inflate the layout for this fragment
         View v=inflater.inflate(R.layout.fragment_trip_register, container, false);
 
+
         destino=(EditText)v.findViewById(R.id.reg_destino);
         asientos=(EditText)v.findViewById(R.id.reg_trip_asiento);
         btn=(Button)v.findViewById(R.id.reg_trip_btn);

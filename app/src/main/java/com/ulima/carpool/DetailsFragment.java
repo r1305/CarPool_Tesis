@@ -1,11 +1,17 @@
 package com.ulima.carpool;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,25 +30,29 @@ import java.util.Map;
 
 public class DetailsFragment extends Fragment {
 
-    Modelo m=new Modelo();
+    Modelo m = new Modelo();
     String user1;
-    TextView rpta,nombre,edad,carrera;
+    TextView rpta, nombre, edad, carrera;
     SessionManager session;
-    HashMap<String,String> u;
-    Alumno a,b;
+    HashMap<String, String> u;
+    Alumno a, b;
+    Button reg;
+    ProgressDialog pDialog;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
+    private String viaje;
 
     public DetailsFragment() {
         // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
-    public static DetailsFragment newInstance(String param1) {
+    public static DetailsFragment newInstance(String param1, String param2) {
         DetailsFragment fragment = new DetailsFragment();
         Bundle args = new Bundle();
         args.putString("alumno1", param1);
+        args.putString("idViaje", param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,11 +62,12 @@ public class DetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString("alumno1");
-            Toast.makeText(getActivity(), mParam1, Toast.LENGTH_SHORT).show();
+            viaje = getArguments().getString("idViaje");
+            //Toast.makeText(getActivity(), mParam1, Toast.LENGTH_SHORT).show();
         }
-        session=new SessionManager(getActivity());
-        u=session.getUserDetails();
-        user1=u.get(SessionManager.KEY_EMAIL);
+        session = new SessionManager(getActivity());
+        u = session.getUserDetails();
+        user1 = u.get(SessionManager.KEY_EMAIL);
         getData();
     }
 
@@ -64,11 +75,29 @@ public class DetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v=inflater.inflate(R.layout.fragment_details, container, false);
-            rpta=(TextView)v.findViewById(R.id.txt_afinidad);
-        nombre=(TextView)v.findViewById(R.id.txt_detail_nombre);
-        edad=(TextView)v.findViewById(R.id.txt_detail_edad);
-        carrera=(TextView)v.findViewById(R.id.txt_detail_carrera);
+        View v = inflater.inflate(R.layout.fragment_details, container, false);
+        pDialog = new ProgressDialog(getActivity());
+        rpta = (TextView) v.findViewById(R.id.txt_afinidad);
+        nombre = (TextView) v.findViewById(R.id.txt_detail_nombre);
+        edad = (TextView) v.findViewById(R.id.txt_detail_edad);
+        carrera = (TextView) v.findViewById(R.id.txt_detail_carrera);
+        reg = (Button) v.findViewById(R.id.sol_btn);
+
+        reg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String message = "Registrando solicitud...";
+                SpannableString ss2 = new SpannableString(message);
+                ss2.setSpan(new RelativeSizeSpan(1f), 0, ss2.length(), 0);
+                ss2.setSpan(new ForegroundColorSpan(Color.BLACK), 0, ss2.length(), 0);
+
+                pDialog.setMessage(ss2);
+
+                pDialog.setCancelable(true);
+                pDialog.show();
+                registrar();
+            }
+        });
         return v;
     }
 
@@ -76,7 +105,7 @@ public class DetailsFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
 
         String url = "https://tesis-ojeda-carrasco.herokuapp.com/getDatos";
-        String url2="http://192.168.1.6:8080/Tesis_Ojeda/getDatos";
+        String url2 = "http://192.168.1.6:8080/Tesis_Ojeda/getDatos";
 
         // Request a string response from the provided URL.
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
@@ -84,8 +113,8 @@ public class DetailsFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         // response
-                        a=new Alumno();
-                        a=m.setDatosA(response);
+                        a = new Alumno();
+                        a = m.setDatosA(response);
                         //Toast.makeText(getActivity(),"alumnoA: "+ response, Toast.LENGTH_SHORT).show();
                         getData2();
                     }
@@ -113,7 +142,7 @@ public class DetailsFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
 
         String url = "https://tesis-ojeda-carrasco.herokuapp.com/getDatos";
-        String url2="http://192.168.1.6:8080/Tesis_Ojeda/getDatos";
+        String url2 = "http://192.168.1.6:8080/Tesis_Ojeda/getDatos";
 
         // Request a string response from the provided URL.
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
@@ -121,8 +150,8 @@ public class DetailsFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         // response
-                        b=new Alumno();
-                        b=m.setDatosB(response);
+                        b = new Alumno();
+                        b = m.setDatosB(response);
                         //Toast.makeText(getActivity(), "alumnoB: "+response, Toast.LENGTH_SHORT).show();
                         nombre.setText(b.getNombres());
                         edad.setText((String.valueOf(b.getEdad())));
@@ -131,13 +160,13 @@ public class DetailsFragment extends Fragment {
                             @Override
                             public void run() {
 
-                                double af=100*m.calcularAfinidadTotal(a,b);
-                                rpta.setText(String.valueOf(Math.round(af))+"%");
+                                double af = 100 * m.calcularAfinidadTotal(a, b);
+                                rpta.setText(String.valueOf(Math.round(af)) + "%");
                             }
-                        },3000);
+                        }, 3000);
 
-                        double af=100*m.calcularAfinidadTotal(a,b);
-                        rpta.setText(String.valueOf(Math.round(af))+"%");
+                        double af = 100 * m.calcularAfinidadTotal(a, b);
+                        rpta.setText(String.valueOf(Math.round(af)) + "%");
                         //pDialog.dismiss();
                     }
                 },
@@ -157,6 +186,49 @@ public class DetailsFragment extends Fragment {
             }
         };
         queue.add(postRequest);
+    }
+
+    public void registrar() {
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+
+        String url = "https://tesis-ojeda-carrasco.herokuapp.com/notificacion";
+        String url2 = "http://192.168.1.13:8080/Tesis_Ojeda/notificacion";
+
+        // Request a string response from the provided URL.
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        pDialog.dismiss();
+                        if(response.equals("ok")){
+                            Toast.makeText(getActivity(), "Solicitud enviada", Toast.LENGTH_SHORT).show();
+                            reg.setEnabled(false);
+                        }else{
+                            Toast.makeText(getActivity(), "Error al registrar", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Toast.makeText(getActivity(), "Error: " + error, Toast.LENGTH_LONG).show();
+                        pDialog.dismiss();
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("user", user1);
+                params.put("user2", mParam1);
+                params.put("idCarrera", viaje);
+                return params;
+            }
+        };
+        queue.add(postRequest);
+
     }
 
 

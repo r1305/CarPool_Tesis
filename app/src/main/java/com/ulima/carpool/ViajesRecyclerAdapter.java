@@ -69,10 +69,6 @@ public class ViajesRecyclerAdapter extends RecyclerView.Adapter<ViajesRecyclerAd
             destino=(TextView)itemView.findViewById(R.id.item_destino);
             auto=(TextView)itemView.findViewById(R.id.item_auto);
 
-
-            //destino.setTextSize(25);
-            //auto.setTextSize(25);
-
         }
     }
 }

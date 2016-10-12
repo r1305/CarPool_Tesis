@@ -2,6 +2,7 @@ package com.ulima.carpool;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -10,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,15 +35,11 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-    //@Bind(R.id.drawer_layout)
+
     DrawerLayout dl;
-    //@Bind(R.id.toolbar)
     Toolbar toolbar;
-    //@Bind(R.id.navigation)
     NavigationView nav;
-    //@Bind(R.id.txt_nav_header)
     TextView txt_nav;
-    //@Bind(R.id.profile)
     SessionManager session;
     CircleImageView img;
     String email;
@@ -113,12 +109,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //LoginManager.getInstance().logOut();
                 return true;
             case R.id.registar_viaje:
-                Fragment viaje=TripRegisterFragment.newInstance();
-                ft.replace(R.id.flaContenido,viaje);
-                toolbar.setTitle("Nuevo viaje");
-                ft.commit();
-                dl.closeDrawers();
-                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+                Intent i=new Intent(MainActivity.this,MapsActivity.class);
+                startActivity(i);
                 return true;
             case R.id.perfil:
                 Fragment perfil=PerfilFragment.newInstance(datos);
@@ -129,9 +121,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.viajes:
-                Fragment libros=ListTripFragment.newInstance();
-                ft.replace(R.id.flaContenido,libros);
+                Fragment lista=ListTripFragment.newInstance();
+                ft.replace(R.id.flaContenido,lista);
                 toolbar.setTitle("Viajes");
+                ft.commit();
+                dl.closeDrawers();
+                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.notificaciones:
+                Fragment sol=ListSolFragment.newInstance();
+                ft.replace(R.id.flaContenido,sol);
+                toolbar.setTitle("Notificaciones");
                 ft.commit();
                 dl.closeDrawers();
                 Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();

@@ -1,12 +1,10 @@
 package com.ulima.carpool;
 
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
@@ -16,10 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -34,32 +28,38 @@ import com.ulima.carpool.Utils.SessionManager;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class ListTripFragment extends Fragment {
+public class ListSolFragment extends Fragment {
 
 
     ListView list;
     ProgressDialog pDialog;
     RecyclerView trips;
-    ViajesRecyclerAdapter adapter;
+    SolicitudesRecyclerAdapter adapter;
     List<JSONObject> l2=new ArrayList<>();
+    SessionManager session;
+    String user;
 
-    public ListTripFragment() {
+    public ListSolFragment() {
         // Required empty public constructor
     }
 
-    public static ListTripFragment newInstance() {
-        ListTripFragment fragment = new ListTripFragment();
+    public static ListSolFragment newInstance() {
+        ListSolFragment fragment = new ListSolFragment();
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        session=new SessionManager(getActivity());
+        HashMap<String,String>u=session.getUserDetails();
+        user=u.get(SessionManager.KEY_EMAIL);
 
     }
 
@@ -75,21 +75,11 @@ public class ListTripFragment extends Fragment {
         trips=(RecyclerView)v.findViewById(R.id.recycler_view_trips);
         trips.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        adapter=new ViajesRecyclerAdapter(l2);
+        adapter=new SolicitudesRecyclerAdapter(l2);
         trips.setAdapter(adapter);
-        adapter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                JSONObject o=(JSONObject)view.getTag();
-                //Toast.makeText(getActivity(), o.toJSONString(), Toast.LENGTH_SHORT).show();
-                FragmentTransaction ft=getFragmentManager().beginTransaction();
-                Fragment details=DetailsFragment.newInstance(o.get("user").toString(),o.get("idViaje").toString());
-                ft.replace(R.id.flaContenido,details);
-                ft.commit();
-            }
-        });
 
-        String message = "Cargando viajes...";
+
+        String message = "Cargando solicitudes...";
 
         SpannableString ss2 = new SpannableString(message);
         ss2.setSpan(new RelativeSizeSpan(1f), 0, ss2.length(), 0);
@@ -99,18 +89,18 @@ public class ListTripFragment extends Fragment {
 
         pDialog.setCancelable(true);
         pDialog.show();
-        getViajes();
+        getSolicitudes();
 
 
         return v;
     }
 
-    public List<JSONObject> getViajes() {
+    public List<JSONObject> getSolicitudes() {
         final List<JSONObject> l = new ArrayList<>();
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url = "https://tesis-ojeda-carrasco.herokuapp.com/ListarViajes";
-        String url2="http://192.168.1.6:8080/Tesis_Ojeda/ListarViajes";
+        String url = "https://tesis-ojeda-carrasco.herokuapp.com/ListarSolicitudes";
+        String url2="http://192.168.1.6:8080/Tesis_Ojeda/ListarSolicitudes";
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -121,7 +111,7 @@ public class ListTripFragment extends Fragment {
                         JSONObject obj;
                         try {
                             obj = (JSONObject) jp.parse(response);
-                            JSONArray ja = (JSONArray) obj.get("viajes");
+                            JSONArray ja = (JSONArray) obj.get("solicitudes");
                             System.out.println(ja);
                             for(int i=0;i<ja.size();i++){
                                 l2.add((JSONObject)ja.get(i));
@@ -130,7 +120,7 @@ public class ListTripFragment extends Fragment {
                             adapter.notifyDataSetChanged();
                             pDialog.dismiss();
                         } catch (Exception e) {
-                            getViajes();
+                            getSolicitudes();
                             Toast.makeText(getActivity(),e.toString(), Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                             pDialog.dismiss();
@@ -146,7 +136,15 @@ public class ListTripFragment extends Fragment {
                         pDialog.dismiss();
                     }
                 }
-        );
+        ){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("user", user);
+
+                return params;
+            }
+        };;
         queue.add(postRequest);
 
 

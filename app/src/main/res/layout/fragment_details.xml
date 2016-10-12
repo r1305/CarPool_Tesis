@@ -27,7 +27,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="@string/hello_blank_fragment"
                 android:id="@+id/txt_detail_nombre"
                 android:textSize="30sp"
                 android:layout_weight="1"
@@ -49,7 +48,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="@string/hello_blank_fragment"
                 android:id="@+id/txt_detail_edad"
                 android:textSize="30sp"
                 android:layout_weight="1"
@@ -72,7 +70,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="@string/hello_blank_fragment"
                 android:id="@+id/txt_detail_carrera"
                 android:textSize="30sp"
                 android:layout_weight="1"
@@ -94,12 +91,20 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="@string/hello_blank_fragment"
+
                 android:id="@+id/txt_afinidad"
                 android:textSize="30sp"
                 android:layout_weight="1"
                 android:gravity="center"/>
         </LinearLayout>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enviar Solicitud"
+            android:backgroundTint="#9bcc5a"
+            android:layout_marginStart="85dp"
+            android:layout_marginEnd="85dp"
+            android:id="@+id/sol_btn"/>
 
     </LinearLayout>
 
