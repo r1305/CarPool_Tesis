@@ -8,50 +8,52 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_marginEnd="5dp"
         android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Nombre"
-                android:textSize="22sp"
-                android:layout_weight="2"
-                android:gravity="center_vertical"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:text="Nombre"
+                android:textSize="22sp" />
+
+            <TextView
                 android:id="@+id/txt_detail_nombre"
-                android:textSize="30sp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:textSize="30sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Edad"
-                android:textSize="22sp"
-                android:layout_weight="2"
-                android:gravity="center_vertical"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:text="Edad"
+                android:textSize="22sp" />
+
+            <TextView
                 android:id="@+id/txt_detail_edad"
-                android:textSize="30sp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:textSize="30sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -62,49 +64,53 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Carrera"
-                android:textSize="22sp"
                 android:layout_weight="2"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:text="Carrera"
+                android:textSize="22sp" />
 
             <TextView
+                android:id="@+id/txt_detail_carrera"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/txt_detail_carrera"
-                android:textSize="30sp"
                 android:layout_weight="1"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:textSize="30sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Afinidad"
-                android:textSize="22sp"
                 android:layout_weight="2"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:text="Afinidad"
+                android:textSize="22sp" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
                 android:id="@+id/txt_afinidad"
-                android:textSize="30sp"
+                android:layout_width="match_parent"
+
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:textSize="30sp" />
         </LinearLayout>
+
+
+
         <Button
+            android:id="@+id/sol_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Enviar Solicitud"
-            android:backgroundTint="#9bcc5a"
-            android:layout_marginStart="85dp"
             android:layout_marginEnd="85dp"
-            android:id="@+id/sol_btn"/>
+            android:layout_marginStart="85dp"
+            android:backgroundTint="#9bcc5a"
+            android:text="Enviar Solicitud" />
 
     </LinearLayout>
 

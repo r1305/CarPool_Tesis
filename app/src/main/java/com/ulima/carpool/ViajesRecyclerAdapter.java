@@ -40,6 +40,8 @@ public class ViajesRecyclerAdapter extends RecyclerView.Adapter<ViajesRecyclerAd
         holder.destino.setText(o.get("destino").toString());
         System.out.println("holder: "+o);
         holder.auto.setText(o.get("placa").toString());
+        holder.espera.setText(o.get("espera").toString());
+        holder.enc.setText(o.get("encuentro").toString());
         holder.itemView.setTag(o);
         holder.itemView.setOnClickListener(listener);
     }
@@ -62,12 +64,14 @@ public class ViajesRecyclerAdapter extends RecyclerView.Adapter<ViajesRecyclerAd
     class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        TextView destino,auto;
+        TextView destino,auto,enc,espera;
 
         public ViewHolder(View itemView) {
             super(itemView);
             destino=(TextView)itemView.findViewById(R.id.item_destino);
             auto=(TextView)itemView.findViewById(R.id.item_auto);
+            enc=(TextView)itemView.findViewById(R.id.item_encuentro);
+            espera=(TextView)itemView.findViewById(R.id.item_espera);
 
         }
     }

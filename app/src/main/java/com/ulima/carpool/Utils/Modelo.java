@@ -4,9 +4,6 @@ package com.ulima.carpool.Utils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-/**
- * Created by Julian on 02/09/2016.
- */
 public class Modelo {
 
 

@@ -71,16 +71,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     DrawerLayout dl;
     Toolbar toolbar;
     NavigationView nav;
-    TextView txt_nav;
-    CircleImageView img;
     String email;
     SessionManager session;
     Location locationA;
     Location locationB;
-    LatLng dir;
     float distance;
     Button search,reg;
-    EditText destino, asientos;
+    EditText destino, asientos,punto,espera;
     ProgressDialog pDialog;
 
     @Override
@@ -100,6 +97,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         dl = (DrawerLayout) findViewById(R.id.drawer_layout);
         destino = (EditText) findViewById(R.id.reg_destino);
         asientos = (EditText) findViewById(R.id.reg_trip_asiento);
+        punto=(EditText)findViewById(R.id.reg_punto);
+        espera=(EditText)findViewById(R.id.reg_trip_espera);
         reg=(Button)findViewById(R.id.reg_trip_btn);
 
         reg.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +115,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 pDialog.setCancelable(true);
                 pDialog.show();
-                trip_register(destino.getText().toString(),asientos.getText().toString(),String.valueOf(distance));
+                trip_register(destino.getText().toString(),asientos.getText().toString(),String.valueOf(distance),punto.getText().toString(),espera.getText().toString());
             }
         });
 
@@ -330,7 +329,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return p1;
     }
 
-    public void trip_register(final String destino,final String asientos,final String d) {
+    public void trip_register(final String destino,final String asientos,final String d,final String encuentro,final String min) {
 
         RequestQueue queue = Volley.newRequestQueue(MapsActivity.this);
         String url = "https://tesis-ojeda-carrasco.herokuapp.com/viajes";
@@ -373,6 +372,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 params.put("asientos", asientos);
                 params.put("usuario",email);
                 params.put("km",d);
+                params.put("encuentro",encuentro);
+                params.put("espera",min);
 
 
                 return params;

@@ -110,7 +110,7 @@ public class ListTripFragment extends Fragment {
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://tesis-ojeda-carrasco.herokuapp.com/ListarViajes";
-        String url2="http://192.168.1.6:8080/Tesis_Ojeda/ListarViajes";
+        String url2="http://192.168.1.13:8080/Tesis_Ojeda/ListarViajes";
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
