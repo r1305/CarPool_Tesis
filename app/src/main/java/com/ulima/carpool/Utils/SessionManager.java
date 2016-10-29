@@ -23,6 +23,13 @@ public class SessionManager {
 
     private static final String IS_LOGIN = "IsLoggedIn";
     public static final String KEY_EMAIL = "email";
+    public static final String KEY_EDAD = "edad";
+    public static final String KEY_SEXO = "sexo";
+    public static final String KEY_FB = "fb";
+    public static final String KEY_CARRERA = "carrera";
+    public static final String KEY_CICLO = "ciclo";
+    public static final String KEY_CARAC = "carac";
+    public static final String KEY_UNIV = "univ";
 
     public SessionManager(Context context){
         this._context = context;
@@ -39,6 +46,18 @@ public class SessionManager {
 
         // commit changes
         editor.commit();
+    }
+    
+    public void createPesos(String edad, String sexo, String fb,String carrera, String ciclo,String caracteristicas,String universidad){
+        editor.putString(KEY_EDAD,edad);
+        editor.putString(KEY_SEXO,sexo);
+        editor.putString(KEY_FB,fb);
+        editor.putString(KEY_CARRERA,carrera);
+        editor.putString(KEY_CICLO,ciclo);
+        editor.putString(KEY_CARAC,caracteristicas);
+        editor.putString(KEY_UNIV,universidad);
+        editor.commit();
+        
     }
 
     public void checkLogin(){
