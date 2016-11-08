@@ -14,27 +14,26 @@ import java.util.HashMap;
 public class SessionManager {
 
     SharedPreferences pref;
+    SharedPreferences pref1;
 
     SharedPreferences.Editor editor;
+    SharedPreferences.Editor editor1;
 
     Context _context;
 
     int PRIVATE_MODE=0;
 
     private static final String IS_LOGIN = "IsLoggedIn";
-    public static final String KEY_EMAIL = "email";
-    public static final String KEY_EDAD = "edad";
-    public static final String KEY_SEXO = "sexo";
-    public static final String KEY_FB = "fb";
-    public static final String KEY_CARRERA = "carrera";
-    public static final String KEY_CICLO = "ciclo";
-    public static final String KEY_CARAC = "carac";
-    public static final String KEY_UNIV = "univ";
+    public static final String KEY_EMAIL="email";
+    public static final String KEY_PESOS="pesos";
 
     public SessionManager(Context context){
         this._context = context;
+
         pref = _context.getSharedPreferences(KEY_EMAIL, PRIVATE_MODE);
+        pref1 = _context.getSharedPreferences(KEY_PESOS, PRIVATE_MODE);
         editor = pref.edit();
+        editor1=pref1.edit();
     }
 
     public void createLoginSession(String email){
@@ -48,16 +47,20 @@ public class SessionManager {
         editor.commit();
     }
     
-    public void createPesos(String edad, String sexo, String fb,String carrera, String ciclo,String caracteristicas,String universidad){
-        editor.putString(KEY_EDAD,edad);
-        editor.putString(KEY_SEXO,sexo);
-        editor.putString(KEY_FB,fb);
-        editor.putString(KEY_CARRERA,carrera);
-        editor.putString(KEY_CICLO,ciclo);
-        editor.putString(KEY_CARAC,caracteristicas);
-        editor.putString(KEY_UNIV,universidad);
-        editor.commit();
-        
+    public void createPesos(String pesos){
+        editor1.putString(KEY_PESOS,pesos);
+
+        editor1.commit();
+
+//        Modelo m=new Modelo();
+//        m.setEdad(Integer.parseInt(edad));
+//        m.setSexo(Integer.parseInt(sexo));
+//        m.setFb(Integer.parseInt(fb));
+//        m.setCarrera(Integer.parseInt(carrera));
+//        m.setCiclo(Integer.parseInt(ciclo));
+//        m.setCarac(Integer.parseInt(caracteristicas));
+//        m.setUniv(Integer.parseInt(universidad));
+
     }
 
     public void checkLogin(){
@@ -82,6 +85,7 @@ public class SessionManager {
 
         // user email id
         user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
+        user.put(KEY_PESOS, pref1.getString(KEY_PESOS, null));
 
         // return user
         return user;

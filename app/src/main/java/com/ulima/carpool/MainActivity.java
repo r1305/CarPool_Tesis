@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle("Perfil");
                 ft.commit();
                 dl.closeDrawers();
-                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.viajes:
                 Fragment lista=ListTripFragment.newInstance();
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle("Viajes");
                 ft.commit();
                 dl.closeDrawers();
-                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.notificaciones:
                 Fragment sol=ListSolFragment.newInstance();
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle("Notificaciones");
                 ft.commit();
                 dl.closeDrawers();
-                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
 
             case R.id.carro:
@@ -143,7 +143,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle("Registrar Auto");
                 ft.commit();
                 dl.closeDrawers();
-                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+                return true;
+
+            case R.id.preferencias:
+                Fragment pref=PreferencesFragment.newInstance();
+                ft.replace(R.id.flaContenido,pref);
+                toolbar.setTitle("Preferencias");
+                ft.commit();
+                dl.closeDrawers();
+//                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
         }
         return false;

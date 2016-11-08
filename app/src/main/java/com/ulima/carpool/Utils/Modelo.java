@@ -1,11 +1,84 @@
 package com.ulima.carpool.Utils;
 
 
+import android.content.Context;
+
+import com.ulima.carpool.MainActivity;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class Modelo {
 
+
+//    SessionManager session=new SessionManager();
+    int edad=2;
+    int sexo=2;
+    int fb=6;
+    int carrera=5;
+    int univ=2;
+    int ciclo=5;
+    int carac=8;
+
+    public Modelo() {
+    }
+
+    public int getEdad() {
+        return edad;
+    }
+
+    public void setEdad(int edad) {
+        this.edad = edad;
+    }
+
+    public int getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(int sexo) {
+        this.sexo = sexo;
+    }
+
+    public int getFb() {
+        return fb;
+    }
+
+    public void setFb(int fb) {
+        this.fb = fb;
+    }
+
+    public int getCarrera() {
+        return carrera;
+    }
+
+    public void setCarrera(int carrera) {
+        this.carrera = carrera;
+    }
+
+    public int getUniv() {
+        return univ;
+    }
+
+    public void setUniv(int univ) {
+        this.univ = univ;
+    }
+
+    public int getCiclo() {
+        return ciclo;
+    }
+
+    public void setCiclo(int ciclo) {
+        this.ciclo = ciclo;
+    }
+
+    public int getCarac() {
+        return carac;
+    }
+
+    public void setCarac(int carac) {
+        this.carac = carac;
+    }
 
     public Alumno setDatosA(String alumno) {
         Alumno a = new Alumno();
@@ -17,17 +90,22 @@ public class Modelo {
 
             o = (JSONObject) p.parse(alumno);
             //System.out.println(o.get("carrera") + "-" + o.get("ciclo") + "-" + o.get("sexo") + "-" + o.get("edad"));
-            a.setNombres(aes.decrypt(o.get("nombre").toString()));
-            a.setCarrera(aes.decrypt((String)o.get("carrera")));
+
+            try {
+                a.setNombres(aes.decrypt(o.get("nombre").toString()));
+                a.setCarrera(aes.decrypt((String)o.get("carrera")));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             a.setCiclo(Integer.parseInt(String.valueOf((long)o.get("ciclo"))));
             a.setSexo((String)o.get("sexo"));
             a.setEdad(Integer.parseInt(String.valueOf((long)o.get("edad"))));
-            a.setComun((int)o.get("comun"));
+            a.setComun(Integer.parseInt(String.valueOf((long)o.get("comun"))));
             System.out.println("alumno A: " + a.getSexo() + "-" + a.getCarrera() + "-" + a.getCiclo() + "-" + a.getEdad());
 
 
-        } catch (Exception e) {
-            System.out.println(e);
+        } catch (ParseException e) {
+            System.out.println("modelo: "+e);
         }
         return a;
     }
@@ -181,9 +259,13 @@ public class Modelo {
         double afinidadFb = this.calcularAfinidadFacebook(a);
         double factorEdad, factorSexo, factorFb, afinidadCaracteristicas;
 
-        factorEdad = 0.2;
-        factorSexo = 0.2;
-        factorFb = 0.6;
+        factorEdad = getEdad()/10f;
+//        System.out.println("edad: "+this.edad);
+//        System.out.println("Edad2"+getEdad());
+//        System.out.println("fact: "+factorEdad);
+        factorSexo = getSexo()/10f;
+        factorFb = getFb()/10f;
+//        System.out.println("factorFb"+getFb());
 
         afinidadCaracteristicas = afinidadEdad * factorEdad + afinidadSexo * factorSexo + afinidadFb * factorFb;
         return afinidadCaracteristicas;
@@ -194,8 +276,8 @@ public class Modelo {
         double afinidadCiclo = this.calcularAfinidadCiclo(a, b);
         double factorCarrera, factorCiclo, afinidadUniversidad;
 
-        factorCarrera = 0.5;
-        factorCiclo = 0.5;
+        factorCarrera = getCarrera()/10f;
+        factorCiclo = getCiclo()/10f;
 
         afinidadUniversidad = afinidadCarrera * factorCarrera + afinidadCiclo * factorCiclo;
         return afinidadUniversidad;
@@ -206,8 +288,8 @@ public class Modelo {
         double afinidadUniversidad = this.calcularAfinidadUniversidad(a, b);
         double factorCaracteristicas, factorUniversidad, afinidadTotal;
 
-        factorCaracteristicas = 0.8;
-        factorUniversidad = 0.2;
+        factorCaracteristicas = getCarac()/10f;
+        factorUniversidad = getUniv()/10f;
 
         afinidadTotal = afinidadCaracteristicas * factorCaracteristicas + afinidadUniversidad * factorUniversidad;
         return afinidadTotal;

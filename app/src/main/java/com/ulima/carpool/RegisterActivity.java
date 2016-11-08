@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,7 +36,7 @@ import java.util.Map;
 public class RegisterActivity extends AppCompatActivity {
 
     Spinner sexo, carrera;
-    EditText nombre,edad,ciclo;
+    EditText nombre,edad,ciclo,contraseña;
     SessionManager session;
     Button signup;
     Context c=this;
@@ -56,6 +57,7 @@ public class RegisterActivity extends AppCompatActivity {
         edad=(EditText)findViewById(R.id.edad);
         ciclo=(EditText)findViewById(R.id.ciclo);
         signup=(Button)findViewById(R.id.btn_signup);
+        contraseña=(EditText)findViewById(R.id.psw);
 
         List<String> gender=new ArrayList<>();
         gender.add("Masculino");
@@ -74,6 +76,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             }
         });
+
         sexo.setAdapter(dataAdapter);
 
         List<String> career=new ArrayList<>();
@@ -109,32 +112,37 @@ public class RegisterActivity extends AppCompatActivity {
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pDialog = new ProgressDialog(RegisterActivity.this);
-                String message = "Cargando...";
+                if(contraseña.getText().toString().length()<16){
+                    Toast.makeText(RegisterActivity.this, "La contraseña debe tener 16 dígitos", Toast.LENGTH_SHORT).show();
+                }else{
+                    pDialog = new ProgressDialog(RegisterActivity.this);
+                    String message = "Cargando...";
 
-                SpannableString ss2 = new SpannableString(message);
-                ss2.setSpan(new RelativeSizeSpan(1f), 0, ss2.length(), 0);
-                ss2.setSpan(new ForegroundColorSpan(Color.BLACK), 0, ss2.length(), 0);
+                    SpannableString ss2 = new SpannableString(message);
+                    ss2.setSpan(new RelativeSizeSpan(1f), 0, ss2.length(), 0);
+                    ss2.setSpan(new ForegroundColorSpan(Color.BLACK), 0, ss2.length(), 0);
 
-                pDialog.setMessage(ss2);
+                    pDialog.setMessage(ss2);
 
-                pDialog.setCancelable(true);
-                pDialog.show();
-                AES aes=new AES();
-                try {
-                    String nombre_enc = aes.encrypt(nombre.getText().toString());
-                    String sexo_enc=aes.encrypt(sexo.getSelectedItem().toString());
-                    String carrera_enc=aes.encrypt(carrera.getSelectedItem().toString());
+                    pDialog.setCancelable(true);
+                    pDialog.show();
+                    AES aes=new AES();
+                    try {
+                        String nombre_enc = aes.encrypt(nombre.getText().toString());
+                        String sexo_enc=aes.encrypt(sexo.getSelectedItem().toString());
+                        String carrera_enc=aes.encrypt(carrera.getSelectedItem().toString());
 
-                    signup(nombre_enc,edad.getText().toString(),carrera_enc,ciclo.getText().toString(),sexo_enc);
-                }catch(Exception e){
-                    System.out.println(e);
+                        signup(nombre_enc,edad.getText().toString(),carrera_enc,ciclo.getText().toString(),sexo_enc,contraseña.getText().toString());
+                    }catch(Exception e){
+                        System.out.println(e);
+                    }
                 }
+
             }
         });
     }
 
-    public void signup(final String name,final String edad,final String carrera,final String ciclo,final String sexo) {
+    public void signup(final String name,final String edad,final String carrera,final String ciclo,final String sexo,final String psw) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://tesis-ojeda-carrasco.herokuapp.com/registro";
         String url2 = "http://192.168.1.6:8080/Tesis_Ojeda/registro";
@@ -174,7 +182,7 @@ public class RegisterActivity extends AppCompatActivity {
                 params.put("edad", edad);
                 params.put("correo", u.get(SessionManager.KEY_EMAIL));
                 params.put("sexo", sexo);
-                params.put("clave", "123");
+                params.put("clave", psw);
                 params.put("carrera",carrera);
                 params.put("ciclo",ciclo);
 

@@ -160,7 +160,7 @@ public class PerfilFragment extends Fragment {
                             try {
                                 JSONObject o=response.getJSONObject();
                                 JSONArray rawName=o.getJSONObject("friends").getJSONArray("data");
-                                String url="https://graph.facebook.com/"+o.getString("id")+"/picture?height=400&width=400";
+                                String url="https://graph.facebook.com/"+o.getString("id")+"/picture?height=100&width=120";
                                 Toast.makeText(getActivity(),String.valueOf(rawName.length()), Toast.LENGTH_SHORT).show();
                                 System.out.println(o);
                                 //pDialog.dismiss();

@@ -7,6 +7,11 @@
         app:rippleColor="#00BCD5" />
 
     <item
+        android:id="@+id/preferencias"
+        android:title="Preferencias"
+        app:rippleColor="#00BCD5" />
+
+    <item
         android:id="@+id/notificaciones"
         android:title="Solicitudes" />
 
@@ -27,4 +32,6 @@
         android:id="@+id/logout"
         android:title="Salir"
         app:rippleColor="#00BCD5" />
+
+
 </menu>

@@ -29,6 +29,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.ulima.carpool.Utils.Modelo;
 import com.ulima.carpool.Utils.SessionManager;
 
 import org.json.simple.JSONArray;
@@ -37,12 +38,16 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ListTripFragment extends Fragment {
 
 
     ListView list;
+//    Modelo m = new Modelo();
+//    SessionManager session;
+//    HashMap<String, String> u;
     ProgressDialog pDialog;
     RecyclerView trips;
     ViajesRecyclerAdapter adapter;
@@ -88,6 +93,19 @@ public class ListTripFragment extends Fragment {
                 ft.commit();
             }
         });
+
+//        session = new SessionManager(getActivity());
+//        u = session.getUserDetails();
+//        String pesos = u.get(SessionManager.KEY_PESOS);
+//        Toast.makeText(getActivity(), "pesos: "+pesos, Toast.LENGTH_SHORT).show();
+//        m.setUniv(Integer.parseInt(u.get(SessionManager.KEY_UNIV)));
+//        m.setCarac(Integer.parseInt(u.get(SessionManager.KEY_CARAC)));
+//        m.setCiclo(Integer.parseInt(u.get(SessionManager.KEY_CICLO)));
+//        m.setSexo(Integer.parseInt(u.get(SessionManager.KEY_SEXO)));
+//        m.setFb(Integer.parseInt(u.get(SessionManager.KEY_SEXO)));
+//        m.setEdad(Integer.parseInt(u.get(SessionManager.KEY_EDAD)));
+//        m.setCiclo(Integer.parseInt(u.get(SessionManager.KEY_CICLO)));
+
 
         String message = "Cargando viajes...";
 

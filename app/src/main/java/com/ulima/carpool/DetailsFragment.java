@@ -25,16 +25,21 @@ import com.ulima.carpool.Utils.Alumno;
 import com.ulima.carpool.Utils.Modelo;
 import com.ulima.carpool.Utils.SessionManager;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class DetailsFragment extends Fragment {
 
     Modelo m = new Modelo();
-    String user1;
+    String user1,pesos;
     TextView rpta, nombre, edad, carrera;
     SessionManager session;
     HashMap<String, String> u;
+    float univ, fb, car, ciclo, age, sexo, carac;
     Alumno a, b;
     Button reg;
     ProgressDialog pDialog;
@@ -68,6 +73,26 @@ public class DetailsFragment extends Fragment {
         session = new SessionManager(getActivity());
         u = session.getUserDetails();
         user1 = u.get(SessionManager.KEY_EMAIL);
+        pesos = u.get(SessionManager.KEY_PESOS);
+        try {
+            JSONParser p = new JSONParser();
+            JSONObject o = (JSONObject) p.parse(pesos);
+            m.setUniv(Integer.parseInt(String.valueOf((long)o.get("uni"))));
+            m.setCarac(Integer.parseInt(String.valueOf((long) o.get("carac"))));
+            m.setCiclo(Integer.parseInt(String.valueOf((long)o.get("ciclo"))));
+            m.setSexo(Integer.parseInt(String.valueOf((long)o.get("sexo"))));
+            m.setFb(Integer.parseInt(String.valueOf((long)o.get("fb"))));
+            m.setEdad(Integer.parseInt(String.valueOf((long)o.get("edad"))));
+            m.setCarrera(Integer.parseInt(String.valueOf((long)o.get("carrera"))));
+            System.out.println("detail");
+            System.out.println(m.getUniv());
+            System.out.println(m.getCarrera());
+        } catch (ParseException e) {
+            System.out.println("error detail "+e);
+            System.out.println(pesos);
+        }
+
+
         getData();
     }
 
@@ -201,10 +226,10 @@ public class DetailsFragment extends Fragment {
                     public void onResponse(String response) {
                         // response
                         pDialog.dismiss();
-                        if(response.equals("ok")){
+                        if (response.equals("ok")) {
                             Toast.makeText(getActivity(), "Solicitud enviada", Toast.LENGTH_SHORT).show();
                             reg.setEnabled(false);
-                        }else{
+                        } else {
                             Toast.makeText(getActivity(), "Error al registrar", Toast.LENGTH_SHORT).show();
                         }
                     }
