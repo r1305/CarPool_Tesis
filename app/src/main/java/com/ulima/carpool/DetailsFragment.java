@@ -87,7 +87,14 @@ public class DetailsFragment extends Fragment {
             System.out.println("detail");
             System.out.println(m.getUniv());
             System.out.println(m.getCarrera());
-        } catch (ParseException e) {
+        } catch (Exception e) {
+            m.setUniv(2);
+            m.setCarac(8);
+            m.setCiclo(5);
+            m.setSexo(2);
+            m.setFb(6);
+            m.setEdad(2);
+            m.setCarrera(5);
             System.out.println("error detail "+e);
             System.out.println(pesos);
         }
