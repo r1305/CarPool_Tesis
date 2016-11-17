@@ -11,11 +11,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center">
             <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/foto_perfil"/>
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:id="@+id/foto_perfil"
+                />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

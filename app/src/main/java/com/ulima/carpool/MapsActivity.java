@@ -101,6 +101,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         espera=(EditText)findViewById(R.id.reg_trip_espera);
         reg=(Button)findViewById(R.id.reg_trip_btn);
 
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(MapsActivity.this,MainActivity.class);
+                startActivity(i);
+                MapsActivity.this.finish();
+            }
+        });
+
         reg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -125,13 +134,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View view) {
                 getLocationFromAddress(getApplicationContext(), destino.getText().toString());
-                LatLng lat_long = origin;
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(lat_long, 15);
-                mMap.animateCamera(cameraUpdate);
-                mMap.addMarker(new MarkerOptions().position(lat_long)
-                        .draggable(true)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                        .title("Destino"));
+
                 //Toast.makeText(MapsActivity.this, distance + " KM", Toast.LENGTH_SHORT).show();
                 mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
                     @Override
@@ -319,6 +322,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             p1 = new LatLng(location.getLatitude(), location.getLongitude());
             origin = p1;
+            LatLng lat_long = origin;
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(lat_long, 15);
+            mMap.animateCamera(cameraUpdate);
+            mMap.addMarker(new MarkerOptions().position(lat_long)
+                    .draggable(true)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                    .title("Destino"));
 
 
         } catch (Exception ex) {

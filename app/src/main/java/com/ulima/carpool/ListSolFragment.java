@@ -1,10 +1,14 @@
 package com.ulima.carpool;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
@@ -14,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -41,9 +46,12 @@ public class ListSolFragment extends Fragment {
     ProgressDialog pDialog;
     RecyclerView trips;
     SolicitudesRecyclerAdapter adapter;
-    List<JSONObject> l2=new ArrayList<>();
+    List<JSONObject> l2 = new ArrayList<>();
     SessionManager session;
     String user;
+
+    private SwipeRefreshLayout swipeContainer;
+
 
     public ListSolFragment() {
         // Required empty public constructor
@@ -57,9 +65,9 @@ public class ListSolFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        session=new SessionManager(getActivity());
-        HashMap<String,String>u=session.getUserDetails();
-        user=u.get(SessionManager.KEY_EMAIL);
+        session = new SessionManager(getActivity());
+        HashMap<String, String> u = session.getUserDetails();
+        user = u.get(SessionManager.KEY_EMAIL);
 
     }
 
@@ -67,16 +75,28 @@ public class ListSolFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v=inflater.inflate(R.layout.fragment_list_trip, container, false);
+        View v = inflater.inflate(R.layout.fragment_list_trip, container, false);
 
-        list=(ListView)v.findViewById(R.id.viajes);
+        list = (ListView) v.findViewById(R.id.viajes);
+
         pDialog = new ProgressDialog(getActivity());
 
-        trips=(RecyclerView)v.findViewById(R.id.recycler_view_trips);
+        trips = (RecyclerView) v.findViewById(R.id.recycler_view_trips);
         trips.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        adapter=new SolicitudesRecyclerAdapter(l2);
+        adapter = new SolicitudesRecyclerAdapter(l2);
         trips.setAdapter(adapter);
+
+        swipeContainer = (SwipeRefreshLayout)v.findViewById(R.id.swipeContainer_act);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                getSolicitudes();
+            }
+        });
+
+
 
 
         String message = "Cargando solicitudes...";
@@ -100,28 +120,29 @@ public class ListSolFragment extends Fragment {
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://tesis-ojeda-carrasco.herokuapp.com/ListarSolicitudes";
-        String url2="http://192.168.1.6:8080/Tesis_Ojeda/ListarSolicitudes";
+        String url2 = "http://192.168.1.6:8080/Tesis_Ojeda/ListarSolicitudes";
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         // response
-                        //System.out.println("***** " + response);
+                        //System.out.println("***** " +
+                        swipeContainer.setRefreshing(false);
                         JSONParser jp = new JSONParser();
                         JSONObject obj;
                         try {
                             obj = (JSONObject) jp.parse(response);
                             JSONArray ja = (JSONArray) obj.get("solicitudes");
                             System.out.println(ja);
-                            for(int i=0;i<ja.size();i++){
-                                l2.add((JSONObject)ja.get(i));
+                            for (int i = 0; i < ja.size(); i++) {
+                                l2.add((JSONObject) ja.get(i));
                                 //System.out.println(ja.get(i));
                             }
                             adapter.notifyDataSetChanged();
                             pDialog.dismiss();
                         } catch (Exception e) {
                             getSolicitudes();
-                            Toast.makeText(getActivity(),e.toString(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                             pDialog.dismiss();
                         }
@@ -136,7 +157,7 @@ public class ListSolFragment extends Fragment {
                         pDialog.dismiss();
                     }
                 }
-        ){
+        ) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
@@ -144,11 +165,36 @@ public class ListSolFragment extends Fragment {
 
                 return params;
             }
-        };;
+        };
+        ;
         queue.add(postRequest);
 
 
         return l;
     }
+
+    public AlertDialog createRadioListDialog(final String user, final String act) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle("¿Le gustó la recomendación?")
+
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //estad(user, act, rpta);
+                        Toast.makeText(getActivity(), "¡Solicitud aceptada!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Rechazar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(getActivity(),"¡Solicitud rechazada!",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        return builder.create();
+    }
+
+
 
 }
