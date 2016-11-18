@@ -85,8 +85,8 @@ public class DetailsFragment extends Fragment {
             m.setEdad(Integer.parseInt(String.valueOf((long)o.get("edad"))));
             m.setCarrera(Integer.parseInt(String.valueOf((long)o.get("carrera"))));
             System.out.println("detail");
-            System.out.println(m.getUniv());
-            System.out.println(m.getCarrera());
+            System.out.println((long)o.get("uni"));
+            System.out.println((long)o.get("carrera"));
         } catch (Exception e) {
             m.setUniv(2);
             m.setCarac(8);

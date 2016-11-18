@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
@@ -53,6 +54,8 @@ public class ListTripFragment extends Fragment {
     ViajesRecyclerAdapter adapter;
     List<JSONObject> l2=new ArrayList<>();
 
+    private SwipeRefreshLayout swipeContainer;
+
     public ListTripFragment() {
         // Required empty public constructor
     }
@@ -91,6 +94,15 @@ public class ListTripFragment extends Fragment {
                 Fragment details=DetailsFragment.newInstance(o.get("user").toString(),o.get("idViaje").toString());
                 ft.replace(R.id.flaContenido,details);
                 ft.commit();
+            }
+        });
+
+        swipeContainer = (SwipeRefreshLayout)v.findViewById(R.id.swipeContainer_trip);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                getViajes();
             }
         });
 
@@ -135,6 +147,8 @@ public class ListTripFragment extends Fragment {
                     public void onResponse(String response) {
                         // response
                         //System.out.println("***** " + response);
+                        swipeContainer.setRefreshing(false);
+                        l2.clear();
                         JSONParser jp = new JSONParser();
                         JSONObject obj;
                         try {

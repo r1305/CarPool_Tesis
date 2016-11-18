@@ -51,15 +51,7 @@ public class SessionManager {
     }
     
     public void createPesos(String pesos){
-        JSONObject o=new JSONObject();
-        o.put("edad",2);
-        o.put("sexo",2);
-        o.put("fb",6);
-        o.put("carrera",5);
-        o.put("ciclo",5);
-        o.put("carac",8);
-        o.put("uni",2);
-        pesos=o.toString();
+
         editor1.putString(KEY_PESOS,pesos);
 
         editor1.commit();

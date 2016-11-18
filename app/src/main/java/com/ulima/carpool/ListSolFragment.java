@@ -87,7 +87,7 @@ public class ListSolFragment extends Fragment {
         adapter = new SolicitudesRecyclerAdapter(l2);
         trips.setAdapter(adapter);
 
-        swipeContainer = (SwipeRefreshLayout)v.findViewById(R.id.swipeContainer_act);
+        swipeContainer = (SwipeRefreshLayout)v.findViewById(R.id.swipeContainer_trip);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -128,6 +128,7 @@ public class ListSolFragment extends Fragment {
                         // response
                         //System.out.println("***** " +
                         swipeContainer.setRefreshing(false);
+                        l2.clear();
                         JSONParser jp = new JSONParser();
                         JSONObject obj;
                         try {
