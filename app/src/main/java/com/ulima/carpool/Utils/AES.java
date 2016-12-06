@@ -14,12 +14,11 @@ import javax.crypto.spec.SecretKeySpec;
 public class AES {
 
     private static final String algo = "AES/CBC/PKCS5Padding";
-    private static final byte[] keyValue
-            = new byte[]{'T', 'h', 'e', 'B', 'e', 's', 't', 'S', 'e', 'c', 'r', 'e', 't', 'K', 'e', 'y'};
+    private static final byte[] keyValue=new byte[16];
 
-    public String encrypt(String Data) throws Exception {
+    public String encrypt(String Data,String clave) throws Exception {
 
-        Key key = generateKey();
+        Key key = generateKey(clave);
         byte[] iv = new byte[16];
         for(int i=0;i<16;i++){
             iv[i]=1;
@@ -34,8 +33,8 @@ public class AES {
         return encryptedValue;
     }
 
-    public String decrypt(String encryptedData) throws Exception {
-        Key key = generateKey();
+    public String decrypt(String encryptedData,String clave) throws Exception {
+        Key key = generateKey(clave);
 
         byte[] iv = new byte[16];
         for(int i=0;i<16;i++){
@@ -51,7 +50,10 @@ public class AES {
         return decryptedValue;
     }
 
-    private static Key generateKey() throws Exception {
+    private static Key generateKey(String clave) throws Exception {
+        for(int i=0;i<16;i++){
+            keyValue[i]=(byte)clave.charAt(i);
+        }
         Key key = new SecretKeySpec(keyValue, "AES");
         return key;
     }

@@ -1,10 +1,12 @@
 package com.ulima.carpool;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -24,6 +26,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
@@ -76,8 +79,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     Location locationA;
     Location locationB;
     float distance;
-    Button search,reg;
-    EditText destino, asientos,punto,espera;
+    Button search, reg;
+    EditText destino, asientos, punto, espera;
     ProgressDialog pDialog;
 
     @Override
@@ -97,14 +100,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         dl = (DrawerLayout) findViewById(R.id.drawer_layout);
         destino = (EditText) findViewById(R.id.reg_destino);
         asientos = (EditText) findViewById(R.id.reg_trip_asiento);
-        punto=(EditText)findViewById(R.id.reg_punto);
-        espera=(EditText)findViewById(R.id.reg_trip_espera);
-        reg=(Button)findViewById(R.id.reg_trip_btn);
+        punto = (EditText) findViewById(R.id.reg_punto);
+        espera = (EditText) findViewById(R.id.reg_trip_espera);
+        reg = (Button) findViewById(R.id.reg_trip_btn);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i=new Intent(MapsActivity.this,MainActivity.class);
+                Intent i = new Intent(MapsActivity.this, MainActivity.class);
                 startActivity(i);
                 MapsActivity.this.finish();
             }
@@ -113,18 +116,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         reg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pDialog = new ProgressDialog(MapsActivity.this);
-                String message = "Cargando...";
-
-                SpannableString ss2 = new SpannableString(message);
-                ss2.setSpan(new RelativeSizeSpan(1f), 0, ss2.length(), 0);
-                ss2.setSpan(new ForegroundColorSpan(Color.BLACK), 0, ss2.length(), 0);
-
-                pDialog.setMessage(ss2);
-
-                pDialog.setCancelable(true);
-                pDialog.show();
-                trip_register(destino.getText().toString(),asientos.getText().toString(),String.valueOf(distance),punto.getText().toString(),espera.getText().toString());
+//                pDialog = new ProgressDialog(MapsActivity.this);
+//                String message = "Cargando...";
+//
+//                SpannableString ss2 = new SpannableString(message);
+//                ss2.setSpan(new RelativeSizeSpan(1f), 0, ss2.length(), 0);
+//                ss2.setSpan(new ForegroundColorSpan(Color.BLACK), 0, ss2.length(), 0);
+//
+//                pDialog.setMessage(ss2);
+//
+//                pDialog.setCancelable(true);
+//                pDialog.show();
+//                trip_register(destino.getText().toString(),asientos.getText().toString(),String.valueOf(distance),punto.getText().toString(),espera.getText().toString());
+                createRadioListDialog(email).show();
             }
         });
 
@@ -149,16 +153,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     @Override
                     public void onMarkerDragEnd(Marker marker) {
-                        locationB=new Location("Destino");
+                        locationB = new Location("Destino");
                         locationB.setLatitude(marker.getPosition().latitude);
                         locationB.setLongitude(marker.getPosition().longitude);
-                        System.out.println("locationB: "+locationB);
-                        System.out.println(locationB.getLatitude()+"-"+locationB.getLongitude());
+                        System.out.println("locationB: " + locationB);
+                        System.out.println(locationB.getLatitude() + "-" + locationB.getLongitude());
                         mMap.addMarker(new MarkerOptions().position(marker.getPosition()).title("Destino")
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                                 .draggable(true));
                         distance = locationA.distanceTo(locationB) / 1000;
-                        System.out.println("distancia: "+locationA.distanceTo(locationB));
+                        System.out.println("distancia: " + locationA.distanceTo(locationB));
                         Toast.makeText(MapsActivity.this, (distance) + " KM", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -194,7 +198,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 locationA = new Location("Inicio");
                 locationA.setLatitude(latLng.latitude);
                 locationA.setLongitude(latLng.longitude);
-                System.out.println("locationB: "+locationA);
+                System.out.println("locationB: " + locationA);
 
             }
 
@@ -218,6 +222,44 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    public AlertDialog createRadioListDialog(final String usuario) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
+        builder.setTitle("Ingrese contraseña");
+        // Set up the input
+        final EditText input = new EditText(this);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        builder.setView(input);
+
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                pDialog = new ProgressDialog(MapsActivity.this);
+                String message = "Validando...";
+
+                SpannableString ss2 = new SpannableString(message);
+                ss2.setSpan(new RelativeSizeSpan(1f), 0, ss2.length(), 0);
+                ss2.setSpan(new ForegroundColorSpan(Color.BLACK), 0, ss2.length(), 0);
+
+                pDialog.setMessage(ss2);
+
+                pDialog.setCancelable(true);
+                pDialog.show();
+                validarClave(usuario, input.getText().toString());
+//                Toast.makeText(MapsActivity.this, "¡Solicitud aceptada!", Toast.LENGTH_SHORT).show();
+            }
+        })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(MapsActivity.this, "¡Registro cancelado!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        return builder.create();
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -230,11 +272,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 mMap.addMarker(new MarkerOptions().position(latLng)
                         .title("Inicio")
                         .draggable(true));
-                locationA=new Location("Inicio");
+                locationA = new Location("Inicio");
                 locationA.setLatitude(latLng.latitude);
                 locationA.setLongitude(latLng.longitude);
-                System.out.println("locationA: "+locationA);
-                System.out.println(locationA.getLatitude()+"-"+locationA.getLongitude());
+                System.out.println("locationA: " + locationA);
+                System.out.println(locationA.getLatitude() + "-" + locationA.getLongitude());
             }
         });
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
@@ -244,12 +286,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         .title("Destino")
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                         .draggable(true));
-                locationB=new Location("Destino");
+                locationB = new Location("Destino");
                 locationB.setLatitude(latLng.latitude);
                 locationB.setLongitude(latLng.longitude);
-                System.out.println("locationB: "+locationB);
-                System.out.println(locationB.getLatitude()+"-"+locationB.getLongitude());
-                System.out.println("distancia: "+locationA.distanceTo(locationB));
+                System.out.println("locationB: " + locationB);
+                System.out.println(locationB.getLatitude() + "-" + locationB.getLongitude());
+                System.out.println("distancia: " + locationA.distanceTo(locationB));
                 distance = locationA.distanceTo(locationB) / 1000;
                 Toast.makeText(MapsActivity.this, (distance) + " KM", Toast.LENGTH_SHORT).show();
 
@@ -266,17 +308,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     @Override
                     public void onMarkerDragEnd(Marker marker) {
-                        locationB=new Location("Destino");
+                        locationB = new Location("Destino");
                         locationB.setLatitude(marker.getPosition().latitude);
                         locationB.setLongitude(marker.getPosition().longitude);
-                        System.out.println("locationB: "+locationB);
-                        System.out.println(locationB.getLatitude()+"-"+locationB.getLongitude());
+                        System.out.println("locationB: " + locationB);
+                        System.out.println(locationB.getLatitude() + "-" + locationB.getLongitude());
                         mMap.addMarker(new MarkerOptions().position(marker.getPosition()).title("Destino")
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                                 .draggable(true)
                                 .snippet("Destino"));
                         distance = locationA.distanceTo(locationB) / 1000;
-                        System.out.println("distancia: "+locationA.distanceTo(locationB));
+                        System.out.println("distancia: " + locationA.distanceTo(locationB));
                         Toast.makeText(MapsActivity.this, (distance) + " KM", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -312,13 +354,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Address location = address.get(0);
             location.getLatitude();
             location.getLongitude();
-            locationB=new Location("Destino");
+            locationB = new Location("Destino");
             locationB.setLatitude(location.getLatitude());
             locationB.setLongitude(location.getLongitude());
-            System.out.println(locationB.getLatitude()+"-"+locationB.getLongitude());
-            distance=locationA.distanceTo(locationB)/1000;
-            System.out.println("distancia: "+locationA.distanceTo(locationB));
-            Toast.makeText(context, distance+" KM", Toast.LENGTH_SHORT).show();
+            System.out.println(locationB.getLatitude() + "-" + locationB.getLongitude());
+            distance = locationA.distanceTo(locationB) / 1000;
+            System.out.println("distancia: " + locationA.distanceTo(locationB));
+            Toast.makeText(context, distance + " KM", Toast.LENGTH_SHORT).show();
 
             p1 = new LatLng(location.getLatitude(), location.getLongitude());
             origin = p1;
@@ -339,11 +381,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return p1;
     }
 
-    public void trip_register(final String destino,final String asientos,final String d,final String encuentro,final String min) {
+    public void trip_register(final String destino, final String asientos, final String d, final String encuentro, final String min, final String clave) {
 
         RequestQueue queue = Volley.newRequestQueue(MapsActivity.this);
         String url = "https://tesis-ojeda-carrasco.herokuapp.com/viajes";
-        String url2="http://192.168.1.13:8080/Tesis_Ojeda/viajes";
+        String url2 = "http://192.168.1.13:8080/Tesis_Ojeda/viajes";
         //**** validar si el usario ya registro un carro *****
         // Request a string response from the provided URL.
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
@@ -354,12 +396,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         if (response.equals("true")) {
                             System.out.println(response);
                             Toast.makeText(MapsActivity.this, "Viaje registrado", Toast.LENGTH_SHORT).show();
-
                             pDialog.dismiss();
 
                         } else {
                             System.out.println(response);
-                            Toast.makeText(MapsActivity.this,"¡Ocurrió un error!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MapsActivity.this, "¡Ocurrió un error!", Toast.LENGTH_SHORT).show();
                             pDialog.dismiss();
                         }
                     }
@@ -370,7 +411,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         // error
                         Toast.makeText(MapsActivity.this, "Error: " + error, Toast.LENGTH_LONG).show();
                         pDialog.dismiss();
-                        System.out.println("error response: "+error);
+                        System.out.println("error response: " + error);
 
                     }
                 }
@@ -380,12 +421,74 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Map<String, String> params = new HashMap<>();
                 params.put("destino", destino);
                 params.put("asientos", asientos);
-                params.put("usuario",email);
-                params.put("km",d);
-                params.put("encuentro",encuentro);
-                params.put("espera",min);
+                params.put("usuario", email);
+                params.put("km", d);
+                params.put("encuentro", encuentro);
+                params.put("espera", min);
+                params.put("clave", clave);
 
 
+                return params;
+            }
+        };
+        queue.add(postRequest);
+    }
+
+    public void validarClave(final String correo, final String clave) {
+
+        RequestQueue queue = Volley.newRequestQueue(MapsActivity.this);
+        String url = "https://tesis-ojeda-carrasco.herokuapp.com/ValidarClave";
+        String url2 = "http://192.168.1.13:8080/Tesis_Ojeda/ValidarClave";
+        //**** validar si el usario ya registro un carro *****
+        // Request a string response from the provided URL.
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        if (response.equals("ok")) {
+                            pDialog.dismiss();
+                            Toast.makeText(MapsActivity.this, "Clave correcta", Toast.LENGTH_SHORT).show();
+                            pDialog = new ProgressDialog(MapsActivity.this);
+                            String message = "Validando...";
+
+                            SpannableString ss2 = new SpannableString(message);
+                            ss2.setSpan(new RelativeSizeSpan(1f), 0, ss2.length(), 0);
+                            ss2.setSpan(new ForegroundColorSpan(Color.BLACK), 0, ss2.length(), 0);
+
+                            pDialog.setMessage(ss2);
+
+                            pDialog.setCancelable(true);
+                            pDialog.show();
+                            trip_register(destino.getText().toString(), asientos.getText().toString(), String.valueOf(distance), punto.getText().toString(), espera.getText().toString(), clave);
+                            System.out.println(response);
+
+
+
+
+                        } else {
+                            System.out.println(response);
+                            Toast.makeText(MapsActivity.this, "¡Clave incorrecta!", Toast.LENGTH_SHORT).show();
+                            pDialog.dismiss();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Toast.makeText(MapsActivity.this, "Error: " + error, Toast.LENGTH_LONG).show();
+                        pDialog.dismiss();
+                        System.out.println("error response: " + error);
+
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("correo", correo);
+                params.put("clave", clave);
                 return params;
             }
         };

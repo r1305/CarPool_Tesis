@@ -14,9 +14,6 @@ import org.json.simple.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Julian on 21/09/2016.
- */
 public class ViajesRecyclerAdapter extends RecyclerView.Adapter<ViajesRecyclerAdapter.ViewHolder>{
 
     //List<JSONObject> list=new ArrayList<>();
@@ -42,6 +39,7 @@ public class ViajesRecyclerAdapter extends RecyclerView.Adapter<ViajesRecyclerAd
         holder.auto.setText(o.get("placa").toString());
         holder.espera.setText(o.get("espera").toString());
         holder.enc.setText(o.get("encuentro").toString());
+        holder.clave.setText(o.get("clave").toString());
         holder.itemView.setTag(o);
         holder.itemView.setOnClickListener(listener);
     }
@@ -64,7 +62,7 @@ public class ViajesRecyclerAdapter extends RecyclerView.Adapter<ViajesRecyclerAd
     class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        TextView destino,auto,enc,espera;
+        TextView destino,auto,enc,espera,clave;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -72,6 +70,7 @@ public class ViajesRecyclerAdapter extends RecyclerView.Adapter<ViajesRecyclerAd
             auto=(TextView)itemView.findViewById(R.id.item_auto);
             enc=(TextView)itemView.findViewById(R.id.item_encuentro);
             espera=(TextView)itemView.findViewById(R.id.item_espera);
+            clave=(TextView)itemView.findViewById(R.id.item_clave);
 
         }
     }

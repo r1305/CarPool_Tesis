@@ -112,8 +112,8 @@ public class RegisterActivity extends AppCompatActivity {
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(contraseña.getText().toString().length()<16){
-                    Toast.makeText(RegisterActivity.this, "La contraseña debe tener 16 dígitos", Toast.LENGTH_SHORT).show();
+                if(contraseña.getText().toString().length()<8 || contraseña.getText().toString().length()>8 ){
+                    Toast.makeText(RegisterActivity.this, "La contraseña debe tener 8 dígitos", Toast.LENGTH_SHORT).show();
                 }else{
                     pDialog = new ProgressDialog(RegisterActivity.this);
                     String message = "Cargando...";
@@ -127,10 +127,11 @@ public class RegisterActivity extends AppCompatActivity {
                     pDialog.setCancelable(true);
                     pDialog.show();
                     AES aes=new AES();
+                    String clave=contraseña.getText().toString()+contraseña.getText().toString();
                     try {
-                        String nombre_enc = aes.encrypt(nombre.getText().toString());
-                        String sexo_enc=aes.encrypt(sexo.getSelectedItem().toString());
-                        String carrera_enc=aes.encrypt(carrera.getSelectedItem().toString());
+                        String nombre_enc = aes.encrypt(nombre.getText().toString(),clave);
+                        String sexo_enc=aes.encrypt(sexo.getSelectedItem().toString(),clave);
+                        String carrera_enc=aes.encrypt(carrera.getSelectedItem().toString(),clave);
 
                         signup(nombre_enc,edad.getText().toString(),carrera_enc,ciclo.getText().toString(),sexo_enc,contraseña.getText().toString());
                     }catch(Exception e){
@@ -154,6 +155,7 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         // response
                         if (response.toString().equals("ok")) {
+                            session.createPsw(psw+psw);
                             Toast.makeText(RegisterActivity.this, "Registro correcto", Toast.LENGTH_SHORT).show();
                             pDialog.dismiss();
                             Intent i = new Intent(RegisterActivity.this, MainActivity.class);

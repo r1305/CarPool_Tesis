@@ -17,9 +17,11 @@ public class SessionManager {
 
     SharedPreferences pref;
     SharedPreferences pref1;
+    SharedPreferences pref2;
 
     SharedPreferences.Editor editor;
     SharedPreferences.Editor editor1;
+    SharedPreferences.Editor editor2;
 
     Context _context;
 
@@ -27,7 +29,7 @@ public class SessionManager {
 
     private static final String IS_LOGIN = "IsLoggedIn";
     public static final String KEY_EMAIL="email";
-
+    public static final String KEY_PSW="psw";
     public static final String KEY_PESOS="pesos";
 
     public SessionManager(Context context){
@@ -35,8 +37,10 @@ public class SessionManager {
 
         pref = _context.getSharedPreferences(KEY_EMAIL, PRIVATE_MODE);
         pref1 = _context.getSharedPreferences(KEY_PESOS, PRIVATE_MODE);
+        pref2=_context.getSharedPreferences(KEY_PSW,PRIVATE_MODE);
         editor = pref.edit();
         editor1=pref1.edit();
+        editor2=pref2.edit();
     }
 
     public void createLoginSession(String email){
@@ -46,8 +50,10 @@ public class SessionManager {
         // Storing email in pref
         editor.putString(KEY_EMAIL, email);
 
+
         // commit changes
         editor.commit();
+
     }
     
     public void createPesos(String pesos){
@@ -55,16 +61,11 @@ public class SessionManager {
         editor1.putString(KEY_PESOS,pesos);
 
         editor1.commit();
+    }
 
-//        Modelo m=new Modelo();
-//        m.setEdad(Integer.parseInt(edad));
-//        m.setSexo(Integer.parseInt(sexo));
-//        m.setFb(Integer.parseInt(fb));
-//        m.setCarrera(Integer.parseInt(carrera));
-//        m.setCiclo(Integer.parseInt(ciclo));
-//        m.setCarac(Integer.parseInt(caracteristicas));
-//        m.setUniv(Integer.parseInt(universidad));
-
+    public void createPsw(String psw){
+        editor2.putString(KEY_PSW,psw);
+        editor2.commit();
     }
 
     public void checkLogin(){
@@ -90,6 +91,7 @@ public class SessionManager {
         // user email id
         user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
         user.put(KEY_PESOS, pref1.getString(KEY_PESOS, null));
+        user.put(KEY_PSW,pref2.getString(KEY_PSW,null));
 
         // return user
         return user;

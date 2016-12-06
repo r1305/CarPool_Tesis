@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView txt_nav;
     SessionManager session;
     CircleImageView img;
-    String email;
+    String email,psw;
     String datos;
 
     @Override
@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         session.checkLogin();
         HashMap<String,String>u=session.getUserDetails();
         email=u.get(SessionManager.KEY_EMAIL);
+        psw=u.get(SessionManager.KEY_PSW);
         getDatos(email);
         setContentView(R.layout.activity_main);
 
@@ -182,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             ft.commit();
                             AES a=new AES();
                             org.json.simple.JSONObject o=(org.json.simple.JSONObject)p.parse(response);
-                            txt_nav.setText(a.decrypt(o.get("nombre").toString()));
+                            txt_nav.setText(a.decrypt(o.get("nombre").toString(),psw));
 
                             if(o.get("foto").toString()!=""&&o.get("foto").toString()!=null){
                                 Picasso.with(MainActivity.this).load(o.get("foto").toString()).into(img);

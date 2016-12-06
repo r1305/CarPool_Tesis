@@ -51,7 +51,7 @@ public class PerfilFragment extends Fragment {
 
 
     CallbackManager callbackManager;
-    String email;
+    String email,psw;
     SessionManager session;
     ProgressDialog pDialog;
     TextView nombre,carrera,edad;
@@ -80,6 +80,7 @@ public class PerfilFragment extends Fragment {
         session=new SessionManager(getActivity());
         HashMap<String,String>u=session.getUserDetails();
         email=u.get(SessionManager.KEY_EMAIL);
+        psw=u.get(SessionManager.KEY_PSW);
         //getDatos(email);
         if(getArguments()!=null){
             data=getArguments().getString("datos");
@@ -105,8 +106,8 @@ public class PerfilFragment extends Fragment {
             AES a=new AES();
             System.out.println(o.get("nombre"));
             System.out.println(o.get("nombre").toString());
-            nombre.setText(a.decrypt(o.get("nombre").toString()));
-            carrera.setText(a.decrypt(o.get("carrera").toString()));
+            nombre.setText(a.decrypt(o.get("nombre").toString(),psw));
+            carrera.setText(a.decrypt(o.get("carrera").toString(),psw));
             edad.setText(o.get("edad").toString());
             Picasso.with(getActivity()).load(o.get("foto").toString()).into(img);
 

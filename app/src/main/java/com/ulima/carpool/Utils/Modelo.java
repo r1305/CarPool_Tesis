@@ -80,7 +80,7 @@ public class Modelo {
         this.carac = carac;
     }
 
-    public Alumno setDatosA(String alumno) {
+    public Alumno setDatosA(String alumno,String clave) {
         Alumno a = new Alumno();
         AES aes=new AES();
         JSONParser p = new JSONParser();
@@ -92,8 +92,8 @@ public class Modelo {
             //System.out.println(o.get("carrera") + "-" + o.get("ciclo") + "-" + o.get("sexo") + "-" + o.get("edad"));
 
             try {
-                a.setNombres(aes.decrypt(o.get("nombre").toString()));
-                a.setCarrera(aes.decrypt((String)o.get("carrera")));
+                a.setNombres(aes.decrypt(o.get("nombre").toString(),clave));
+                a.setCarrera(aes.decrypt((String)o.get("carrera"),clave));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -110,7 +110,7 @@ public class Modelo {
         return a;
     }
 
-    public Alumno setDatosB(String alumno) {
+    public Alumno setDatosB(String alumno,String clave) {
         Alumno b = new Alumno();
         AES aes=new AES();
         JSONParser p = new JSONParser();
@@ -118,8 +118,8 @@ public class Modelo {
         try {
 
             o = (JSONObject) p.parse(alumno);
-            b.setNombres(aes.decrypt(o.get("nombre").toString()));
-            b.setCarrera(aes.decrypt((String)o.get("carrera")));
+            b.setNombres(aes.decrypt(o.get("nombre").toString(),clave));
+            b.setCarrera(aes.decrypt((String)o.get("carrera"),clave));
             b.setCiclo(Integer.parseInt(String.valueOf((long)o.get("ciclo"))));
             b.setSexo((String)o.get("sexo"));
             b.setEdad(Integer.parseInt(String.valueOf((long)o.get("edad"))));

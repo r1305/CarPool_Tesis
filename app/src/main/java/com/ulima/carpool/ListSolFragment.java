@@ -87,7 +87,7 @@ public class ListSolFragment extends Fragment {
         adapter = new SolicitudesRecyclerAdapter(l2);
         trips.setAdapter(adapter);
 
-        swipeContainer = (SwipeRefreshLayout)v.findViewById(R.id.swipeContainer_trip);
+        swipeContainer = (SwipeRefreshLayout) v.findViewById(R.id.swipeContainer_trip);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -95,8 +95,6 @@ public class ListSolFragment extends Fragment {
                 getSolicitudes();
             }
         });
-
-
 
 
         String message = "Cargando solicitudes...";
@@ -173,29 +171,6 @@ public class ListSolFragment extends Fragment {
 
         return l;
     }
-
-    public AlertDialog createRadioListDialog(final String user, final String act) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        builder.setTitle("¿Le gustó la recomendación?")
-
-                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        //estad(user, act, rpta);
-                        Toast.makeText(getActivity(), "¡Solicitud aceptada!", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setNegativeButton("Rechazar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(getActivity(),"¡Solicitud rechazada!",Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-        return builder.create();
-    }
-
 
 
 }

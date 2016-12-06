@@ -12,6 +12,7 @@ import android.text.style.RelativeSizeSpan;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -103,6 +104,9 @@ public class LoginActivity extends AppCompatActivity {
                 return params;
             }
         };
+        postRequest.setRetryPolicy(new DefaultRetryPolicy(5000,
+                15,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(postRequest);
 
         return user;
